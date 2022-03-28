@@ -16,42 +16,54 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `add_courses`
+-- Table structure for table `add_course`
 --
 
-DROP TABLE IF EXISTS `add_courses`;
+DROP TABLE IF EXISTS `add_course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `add_courses` (
-  `add_id` decimal(2,0) NOT NULL,
-  `course_id` varchar(10) DEFAULT NULL,
-  `stud_id` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`add_id`),
+CREATE TABLE `add_course` (
+  `course_id` int NOT NULL,
+  `student_id` int NOT NULL,
+  PRIMARY KEY (`student_id`,`course_id`),
   KEY `course_id` (`course_id`),
-  KEY `stud_id` (`stud_id`),
-  CONSTRAINT `add_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `add_courses_ibfk_2` FOREIGN KEY (`stud_id`) REFERENCES `student` (`stud_id`)
+  CONSTRAINT `add_course_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `add_course_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `courses`
+-- Table structure for table `assists`
 --
 
-DROP TABLE IF EXISTS `courses`;
+DROP TABLE IF EXISTS `assists`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `courses` (
-  `course_name` varchar(20) DEFAULT NULL,
-  `course_id` varchar(10) NOT NULL,
-  `capacity` decimal(2,0) DEFAULT NULL,
-  `course_IC_id` varchar(10) DEFAULT NULL,
-  `course_asst_id` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`course_id`),
-  KEY `course_IC_id` (`course_IC_id`),
-  KEY `course_asst_id` (`course_asst_id`),
-  CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`course_IC_id`) REFERENCES `teacher` (`teacher_id`),
-  CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`course_asst_id`) REFERENCES `teacher` (`teacher_id`)
+CREATE TABLE `assists` (
+  `teacher_id` int NOT NULL,
+  `course_id` int NOT NULL,
+  PRIMARY KEY (`teacher_id`,`course_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `assists_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `assists_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `course`
+--
+
+DROP TABLE IF EXISTS `course`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT 'Course',
+  `capacity` float(2,0) NOT NULL DEFAULT '50',
+  `IC_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IC_id` (`IC_id`),
+  CONSTRAINT `course_ibfk_1` FOREIGN KEY (`IC_id`) REFERENCES `teacher` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,37 +75,43 @@ DROP TABLE IF EXISTS `student`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `student` (
-  `stud_name` varchar(20) DEFAULT NULL,
-  `stud_id` varchar(10) NOT NULL,
-  `course_id` varchar(10) DEFAULT NULL,
-  `add_id` decimal(2,0) DEFAULT NULL,
-  `sub_id` decimal(2,0) DEFAULT NULL,
-  PRIMARY KEY (`stud_id`),
-  KEY `course_id` (`course_id`),
-  KEY `add_id` (`add_id`),
-  KEY `sub_id` (`sub_id`),
-  CONSTRAINT `student_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `student_ibfk_2` FOREIGN KEY (`add_id`) REFERENCES `add_courses` (`add_id`),
-  CONSTRAINT `student_ibfk_3` FOREIGN KEY (`sub_id`) REFERENCES `sub_courses` (`sub_id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT 'Student',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `sub_courses`
+-- Table structure for table `sub_course`
 --
 
-DROP TABLE IF EXISTS `sub_courses`;
+DROP TABLE IF EXISTS `sub_course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sub_courses` (
-  `sub_id` decimal(2,0) NOT NULL,
-  `course_id` varchar(10) DEFAULT NULL,
-  `stud_id` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`sub_id`),
+CREATE TABLE `sub_course` (
+  `course_id` int NOT NULL,
+  `student_id` int NOT NULL,
+  PRIMARY KEY (`student_id`,`course_id`),
   KEY `course_id` (`course_id`),
-  KEY `stud_id` (`stud_id`),
-  CONSTRAINT `sub_courses_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`),
-  CONSTRAINT `sub_courses_ibfk_2` FOREIGN KEY (`stud_id`) REFERENCES `student` (`stud_id`)
+  CONSTRAINT `sub_course_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `sub_course_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `takes`
+--
+
+DROP TABLE IF EXISTS `takes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `takes` (
+  `student_id` int NOT NULL,
+  `course_id` int NOT NULL,
+  PRIMARY KEY (`student_id`,`course_id`),
+  KEY `course_id` (`course_id`),
+  CONSTRAINT `takes_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `takes_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -105,12 +123,9 @@ DROP TABLE IF EXISTS `teacher`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `teacher` (
-  `teacher_name` varchar(20) DEFAULT NULL,
-  `teacher_id` varchar(10) NOT NULL,
-  `course_id` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`teacher_id`),
-  KEY `course_id` (`course_id`),
-  CONSTRAINT `teacher_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`course_id`)
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT 'Teacher',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -123,4 +138,4 @@ CREATE TABLE `teacher` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-25 19:11:47
+-- Dump completed on 2022-03-28  7:43:28
