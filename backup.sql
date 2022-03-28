@@ -38,7 +38,6 @@ CREATE TABLE `add_course` (
 
 LOCK TABLES `add_course` WRITE;
 /*!40000 ALTER TABLE `add_course` DISABLE KEYS */;
-INSERT INTO `add_course` VALUES (3,1);
 /*!40000 ALTER TABLE `add_course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +82,7 @@ CREATE TABLE `course` (
   PRIMARY KEY (`id`),
   KEY `IC_id` (`IC_id`),
   CONSTRAINT `course_ibfk_1` FOREIGN KEY (`IC_id`) REFERENCES `teacher` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +91,6 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (3,'Test',50,1),(4,'Test',50,1),(5,'Test',50,1),(6,'Test',50,1),(7,'Test',50,1),(8,'Test',50,1),(9,'Test',50,1),(10,'Test',50,1),(11,'Test',50,1),(12,'Test',50,1),(13,'Test',50,1),(14,'Test',50,1),(15,'Test',50,1),(16,'Test',50,1),(17,'Test',50,1);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,8 +104,10 @@ DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL DEFAULT 'Student',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `username` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -116,7 +116,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES (1,'test'),(3,'testaaaaaaaaaaaaaaaa');
+INSERT INTO `student` VALUES (1,'Tst','usr'),(2,'\'Mohi\'','\'usr1\'');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,7 +182,9 @@ DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL DEFAULT 'Teacher',
-  PRIMARY KEY (`id`)
+  `username` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -192,7 +194,7 @@ CREATE TABLE `teacher` (
 
 LOCK TABLES `teacher` WRITE;
 /*!40000 ALTER TABLE `teacher` DISABLE KEYS */;
-INSERT INTO `teacher` VALUES (1,'test');
+INSERT INTO `teacher` VALUES (1,'Tst','usr');
 /*!40000 ALTER TABLE `teacher` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -205,4 +207,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-28 10:13:14
+-- Dump completed on 2022-03-28 11:44:00

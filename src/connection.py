@@ -44,6 +44,7 @@ class CURSOR():
     def exit(self) -> None:
         self.DB.close()
         
+
 # Erp database cursor instance
 ERP_DB = CURSOR()
 

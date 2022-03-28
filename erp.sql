@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE teacher(
-	id        INT                           NOT NULL AUTO_INCREMENT,
-	name      VARCHAR(20) DEFAULT 'Teacher' NOT NULL,
+	id       INT                           NOT NULL AUTO_INCREMENT,
+	name     VARCHAR(20) DEFAULT 'Teacher' NOT NULL,
+    username VARCHAR(20) UNIQUE            NOT NULL,
 	PRIMARY KEY (id)
 ) AUTO_INCREMENT = 0;
 
@@ -26,8 +27,9 @@ CREATE TABLE assists(
 
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE student(
-	id   INT                           NOT NULL AUTO_INCREMENT,
-	name VARCHAR(20) DEFAULT 'Student' NOT NULL,
+	id       INT                           NOT NULL AUTO_INCREMENT,
+	name     VARCHAR(20) DEFAULT 'Student' NOT NULL,
+    username VARCHAR(20) UNIQUE            NOT NULL,
 	PRIMARY KEY (id)
 ) AUTO_INCREMENT = 0;
 

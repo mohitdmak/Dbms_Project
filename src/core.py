@@ -7,7 +7,7 @@ from connection import *
 
 # Class handling updations to db
 class UpdateIn():
-    def genByConds(self, table, col, val, **kwargs):
+    def genByConds(self, table, col, val, **kwargs) -> None:
         """:param1 table :params Variable no of key-value pair conditions"""
         condition = f"UPDATE {table} SET {col} = {val} WHERE "
         cond_keys = list(kwargs.keys())
@@ -22,7 +22,7 @@ class UpdateIn():
 
 # Class handling deletions to db
 class DeleteFrom():
-    def genByConds(self, table, **kwargs):
+    def genByConds(self, table, **kwargs) -> None:
         """:param1 table :params Variable no of key-value pair conditions"""
         condition = f"DELETE FROM {table} WHERE "
         cond_keys = list(kwargs.keys())
@@ -37,22 +37,28 @@ class DeleteFrom():
 
 # Class handling all additions to db
 class InsertIn():
-    def student(self, name) -> None:
+    def student(self, name, username) -> None:
         """:param1 name"""
         # Check value limits of name
         if len(name) > 20:
             raise ProgERROR(f"Name(student) crosses len limit 20: {name}")
+        ERP_DB.execute_command(f'SELECT * FROM student WHERE username = "{username}"')
+        if len(ERP_DB.return_results()) != 0:
+            raise ProgERROR(f"Duplicate insertion into Student. name {name} username {username}!")
         ERP_DB.execute_command(
-            f'INSERT INTO student(name) VALUES ("{name}");'   
+            f'INSERT INTO student(name, username) VALUES ("{name}", "{username}");'   
         )
 
-    def teacher(self, name) -> None:
+    def teacher(self, name, username) -> None:
         """:param1 name"""
         # Check value limits of name
         if len(name) > 20:
             raise ProgERROR(f"Name(teacher) crosses len limit 20: {name}")
+        ERP_DB.execute_command(f'SELECT * FROM teacher WHERE username = "{username}"')
+        if len(ERP_DB.return_results()) != 0:
+            raise ProgERROR(f"Duplicate insertion into Teacher. name {name} username {username}!")
         ERP_DB.execute_command(
-            f'INSERT INTO teacher(name) VALUES ("{name}");'   
+            f'INSERT INTO teacher(name, username) VALUES ("{name}", "{username}");'   
         )
 
     def course(self, name, IC_id = "NULL", capacity = 50) -> None:
@@ -141,16 +147,14 @@ class InsertIn():
 
 
 # Test executions ---------------------------
-# InsertHandler = InsertIn()
-# InsertHandler.course("Tst")
+InsertHandler = InsertIn()
+# InsertHandler.student("Tst", "usr")
 # InsertHandler.course("Tst", 1)
 # InsertHandler.addn_course(1, 3)
-# DeleteHandler = DeleteFrom()
+DeleteHandler = DeleteFrom()
 # DeleteHandler.genByConds("course", id = 2)
 # DeleteHandler.genByConds("add_course", student_id = 1, course_id = 2)
-# UpdateHandler = UpdateIn()
+UpdateHandler = UpdateIn()
 # UpdateHandler.genByConds("course", "name", "'check'", id = 1, capacity = 20)
 # UpdateHandler.genByConds("course", "name", "'check'", name = "'newtest'")
 # --------------- ---------------------------
-
-ERP_DB.exit()
