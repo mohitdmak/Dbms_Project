@@ -3,7 +3,7 @@ CREATE TABLE teacher(
 	id        INT                           NOT NULL AUTO_INCREMENT,
 	name      VARCHAR(20) DEFAULT 'Teacher' NOT NULL,
 	PRIMARY KEY (id)
-);
+) AUTO_INCREMENT = 0;
 
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE course(
@@ -13,7 +13,7 @@ CREATE TABLE course(
 	IC_id    INT,
 	PRIMARY KEY (id),
     FOREIGN KEY (IC_id) REFERENCES teacher(id) ON DELETE SET NULL
-);
+) AUTO_INCREMENT = 0;
 
 DROP TABLE IF EXISTS `assists`;
 CREATE TABLE assists(
@@ -29,7 +29,7 @@ CREATE TABLE student(
 	id   INT                           NOT NULL AUTO_INCREMENT,
 	name VARCHAR(20) DEFAULT 'Student' NOT NULL,
 	PRIMARY KEY (id)
-);
+) AUTO_INCREMENT = 0;
 
 DROP TABLE IF EXISTS `takes`;
 CREATE TABLE takes(
