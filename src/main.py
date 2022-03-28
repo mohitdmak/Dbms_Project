@@ -8,7 +8,7 @@ class Request():
         InsertHandler.student(name, username)
         ERP_DB.execute_command(f'SELECT id FROM student WHERE name = "{name}"')
         return (ERP_DB.return_results())[0][0] # type: ignore
-    
+
     def myCourses(self, id) -> set:
         ERP_DB.execute_command(f'SELECT * FROM course c JOIN takes t ON c.id = t.course_id AND t.student_id = {id}')
         return ERP_DB.return_results()

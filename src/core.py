@@ -40,8 +40,8 @@ class InsertIn():
     def student(self, name, username) -> None:
         """:param1 name"""
         # Check value limits of name
-        if len(name) > 20:
-            raise ProgERROR(f"Name(student) crosses len limit 20: {name}")
+        if len(name) > 40:
+            raise ProgERROR(f"Name(student) crosses len limit 40: {name}")
         ERP_DB.execute_command(f'SELECT * FROM student WHERE username = "{username}"')
         if len(ERP_DB.return_results()) != 0:
             raise ProgERROR(f"Duplicate insertion into Student. name {name} username {username}!")
@@ -52,8 +52,8 @@ class InsertIn():
     def teacher(self, name, username) -> None:
         """:param1 name"""
         # Check value limits of name
-        if len(name) > 20:
-            raise ProgERROR(f"Name(teacher) crosses len limit 20: {name}")
+        if len(name) > 40:
+            raise ProgERROR(f"Name(teacher) crosses len limit 40: {name}")
         ERP_DB.execute_command(f'SELECT * FROM teacher WHERE username = "{username}"')
         if len(ERP_DB.return_results()) != 0:
             raise ProgERROR(f"Duplicate insertion into Teacher. name {name} username {username}!")
@@ -69,8 +69,8 @@ class InsertIn():
             if len(ERP_DB.return_results()) == 0:
                 raise ProgERROR(f"No IC. Teacher of id {IC_id} exists!")
         # Check value limits of name and capacity
-        if len(name) > 20:
-            raise ProgERROR(f"Name(course) crosses len limit 20: {name}")
+        if len(name) > 40:
+            raise ProgERROR(f"Name(course) crosses len limit 40: {name}")
         if capacity > 99:
             raise ProgERROR(f"Capacity(course) crosses limit 99: {capacity}")
         ERP_DB.execute_command(
@@ -128,33 +128,44 @@ class InsertIn():
             f'INSERT INTO add_course(student_id, course_id) VALUES ("{student_id}", "{course_id}");'
         )
 
-    def subn_course(self, student_id, course_id):
+    def subn_course(self, student_id, curr_course_id, subn_course_id):
         """:param1 student_id :param2 course_id"""
         # Check if a student of student_id exists raise error if not
         ERP_DB.execute_command( f'SELECT * FROM student where id = {student_id};')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"No Sub_course. Student of id {student_id} exists!")
         # Check if a course of course_id exists raise error if not
-        ERP_DB.execute_command( f'SELECT * FROM course where id = {course_id};')
+        ERP_DB.execute_command( f'SELECT * FROM course where id = {curr_course_id};')
         if len(ERP_DB.return_results()) == 0:
-            raise ProgERROR(f"No Sub_course. Course of id {course_id} exists!")
-        ERP_DB.execute_command( f'SELECT * FROM sub_course where student_id = {student_id} and course_id = {course_id};')
+            raise ProgERROR(f"No Sub_course. Course of id {curr_course_id} exists!")
+        ERP_DB.execute_command( f'SELECT * FROM course where id = {subn_course_id};')
+        if len(ERP_DB.return_results()) == 0:
+            raise ProgERROR(f"No Sub_course. Course of id {subn_course_id} exists!")
+        ERP_DB.execute_command( f'SELECT * FROM sub_course where student_id = {student_id} and curr_course_id = {curr_course_id} AND subn_course_id = {subn_course_id};')
         if len(ERP_DB.return_results()) != 0:
-            raise ProgERROR(f"Duplicate insertion into Sub_course. Studentid {student_id} Courseid {course_id}!")
+            raise ProgERROR(f"Duplicate insertion into Sub_course. Studentid {student_id} CurrCourseid {curr_course_id} SubnCourseid {subn_course_id}!")
+        ERP_DB.execute_command(f"SELECT * FROM takes WHERE student_id = {student_id} AND course_id = {curr_course_id}")
+        if len(ERP_DB.return_results()) == 0:
+            raise ProgERROR(f"Curr Course id {curr_course_id} is not among student {student_id}'s registered courses!")
+        ERP_DB.execute_command(f"SELECT * FROM takes WHERE student_id = {student_id} AND course_id = {subn_course_id}")
+        if len(ERP_DB.return_results()) != 0:
+            raise ProgERROR(f"Subn Course id {subn_course_id} is already among student {student_id}'s registered courses!")
         ERP_DB.execute_command(
-            f'INSERT INTO sub_course(student_id, course_id) VALUES ("{student_id}", "{course_id}");'
+            f'INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES ("{student_id}", "{curr_course_id}", "{subn_course_id}");'
         )
 
 
-# Test executions ---------------------------
+# Instantiate handlers
 InsertHandler = InsertIn()
+DeleteHandler = DeleteFrom()
+UpdateHandler = UpdateIn()
+
+# Test executions ---------------------------
 # InsertHandler.student("Tst", "usr")
 # InsertHandler.course("Tst", 1)
-# InsertHandler.addn_course(1, 3)
-DeleteHandler = DeleteFrom()
+# InsertHandler.subn_course(100, 1, 2)
 # DeleteHandler.genByConds("course", id = 2)
 # DeleteHandler.genByConds("add_course", student_id = 1, course_id = 2)
-UpdateHandler = UpdateIn()
-# UpdateHandler.genByConds("course", "name", "'check'", id = 1, capacity = 20)
+# UpdateHandler.genByConds("course", "name", "'check'", id = 1, capacity = 40)
 # UpdateHandler.genByConds("course", "name", "'check'", name = "'newtest'")
 # --------------- ---------------------------

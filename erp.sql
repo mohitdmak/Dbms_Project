@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE teacher(
 	id       INT                           NOT NULL AUTO_INCREMENT,
-	name     VARCHAR(20) DEFAULT 'Teacher' NOT NULL,
+	name     VARCHAR(40) DEFAULT 'Teacher' NOT NULL,
     username VARCHAR(20) UNIQUE            NOT NULL,
 	PRIMARY KEY (id)
 ) AUTO_INCREMENT = 0;
@@ -9,7 +9,7 @@ CREATE TABLE teacher(
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE course(
 	id       INT                           NOT NULL AUTO_INCREMENT,
-	name     VARCHAR(20)  DEFAULT 'Course' NOT NULL,
+	name     VARCHAR(40)  DEFAULT 'Course' NOT NULL,
 	capacity FLOAT(2,0)   DEFAULT 50       NOT NULL,
 	IC_id    INT,
 	PRIMARY KEY (id),
@@ -28,7 +28,7 @@ CREATE TABLE assists(
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE student(
 	id       INT                           NOT NULL AUTO_INCREMENT,
-	name     VARCHAR(20) DEFAULT 'Student' NOT NULL,
+	name     VARCHAR(40) DEFAULT 'Student' NOT NULL,
     username VARCHAR(20) UNIQUE            NOT NULL,
 	PRIMARY KEY (id)
 ) AUTO_INCREMENT = 0;
@@ -53,9 +53,11 @@ CREATE TABLE add_course(
 
 DROP TABLE IF EXISTS `sub_course`;
 CREATE TABLE sub_course(
-    course_id  INT NOT NULL,
-    student_id INT NOT NULL,
-    PRIMARY KEY (student_id, course_id),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_id)  REFERENCES course(id)  ON DELETE CASCADE
+    curr_course_id  INT NOT NULL,
+    subn_course_id  INT NOT NULL,
+    student_id      INT NOT NULL,
+    PRIMARY KEY (student_id, curr_course_id, subn_course_id),
+    FOREIGN KEY (student_id)      REFERENCES student(id) ON DELETE CASCADE,
+    FOREIGN KEY (curr_course_id)  REFERENCES course(id)  ON DELETE CASCADE,
+    FOREIGN KEY (subn_course_id)  REFERENCES course(id)  ON DELETE CASCADE
 );
