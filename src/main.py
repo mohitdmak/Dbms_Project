@@ -25,8 +25,8 @@ class Request():
         ERP_DB.execute_command(f'SELECT * FROM sub_course a INNER JOIN student s ON a.student_id = {id} AND s.id = {id}')
         return ERP_DB.return_results()
 
-    def add_substitution(self, id, course_id) -> set:
-        InsertHandler.subn_course(id, course_id)
+    def add_substitution(self, id, curr_course_id, subn_course_id) -> set:
+        InsertHandler.subn_course(id, curr_course_id, subn_course_id)
         return self.my_substitution(id)
 
     def withdraw(self, id, course_id) -> set:

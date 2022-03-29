@@ -74,7 +74,7 @@ class FakeData():
             self.fake.unique.clear()
             for course_id in course_id_list:
                 id = i + 1
-                print(f"FAKE TAKE: CourseId {i} StudentId {id}")
+                print(f"FAKE TAKE: CourseId {course_id} StudentId {id}")
                 InsertHandler.takes(id, course_id)
         print(f"\n   Generated {DB_WIDE_FAKE.TAKES} Takes < < < < < <\n")
 
