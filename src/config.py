@@ -1,8 +1,7 @@
 class MysqlConnection:
     HOST   = 'localhost'
-    #USER   = 'Kathan0'
-    USER   = 'kathanpatel2002'
-    #PASSWD = 'mindyourownbusiness20'
+    # USER   = 'kathanpatel2002'
+    USER   = 'mohitdmak'
     PASSWD = ''
     DB     = 'erp'
 

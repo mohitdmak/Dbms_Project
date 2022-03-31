@@ -3,3 +3,4 @@ venv/
 
 # pycache
 src/__pycache__/
+client/__pycache__/

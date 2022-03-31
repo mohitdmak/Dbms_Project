@@ -38,7 +38,7 @@ class DeleteFrom():
 # Class handling all additions to db
 class InsertIn():
     def student(self, name, username) -> None:
-        """:param1 name"""
+        """:param1 name :param2 username"""
         # Check value limits of name
         if len(name) > 40:
             raise ProgERROR(f"Name(student) crosses len limit 40: {name}")
@@ -50,7 +50,7 @@ class InsertIn():
         )
 
     def teacher(self, name, username) -> None:
-        """:param1 name"""
+        """:param1 name :param2 username"""
         # Check value limits of name
         if len(name) > 40:
             raise ProgERROR(f"Name(teacher) crosses len limit 40: {name}")
