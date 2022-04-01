@@ -47,10 +47,12 @@ def login():
 @app.route("/mycourses/<id>", methods = ["GET"])
 def mycourses(id):
     res = []
-    ERP_DB.execute_command(f'SELECT c.name FROM course c JOIN takes t ON c.id = t.course_id AND t.student_id = {id}')
+    ERP_DB.execute_command(f'SELECT c.id, c.name, c.IC_id, c.capacity FROM course c JOIN takes t ON c.id = t.course_id AND t.student_id = {id}')
     db_res = ERP_DB.return_results()
     for course in db_res:
-        res.append(course[0])
+        ERP_DB.execute_command(f'SELECT name FROM teacher WHERE id = {course[2]}')
+        ic_name = ERP_DB.return_results()[0][0] # type: ignore
+        res.append({"id": course[0], "name": course[1], "IC_ID": course[2], "IC_name": ic_name, "capacity": course[3]})
     return str(res)
 
 # Student withdrawal path
@@ -70,23 +72,28 @@ def withdraw(id):
 @app.route("/myadditions/<id>", methods = ["GET"])
 def myadditions(id):
     res = []
-    ERP_DB.execute_command(f'SELECT c.name FROM add_course a INNER JOIN student s INNER JOIN course c ON a.student_id = {id} AND s.id = {id} AND a.course_id = c.id')
+    ERP_DB.execute_command(f'SELECT c.id, c.name FROM add_course a INNER JOIN student s INNER JOIN course c ON a.student_id = {id} AND s.id = {id} AND a.course_id = c.id')
     db_res = ERP_DB.return_results()
     print(db_res)
     for course in db_res:
-        res.append(course[0])
+        res.append({"id": course[0], "name": course[1]})
     return str(res)
 
-# Student's addition requests
-# @app.route("/mysubstitutions/<id>", methods = ["GET"])
-# def mysubstitutions(id):
-#     res = []
-#     ERP_DB.execute_command(f'SELECT c.curr FROM sub_course a INNER JOIN student s INNER JOIN course c ON a.student_id = {id} AND s.id = {id} AND a.course_id = c.id')
-#     db_res = ERP_DB.return_results()
-#     print(db_res)
-#     for course in db_res:
-#         res.append(course[0])
-#     return str(res)
+# Student's substitution requests
+@app.route("/mysubstitutions/<id>", methods = ["GET"])
+def mysubstitutions(id):
+    res = []
+    ERP_DB.execute_command(f'SELECT curr_course_id, subn_course_id FROM sub_course WHERE student_id = {id}')
+    db_res = ERP_DB.return_results()
+    for course in db_res:
+        ERP_DB.execute_command(f'SELECT name FROM course WHERE id = {course[0]}')
+        curr_course_name = ERP_DB.return_results()
+        curr_course_name = curr_course_name[0][0] # type: ignore
+        ERP_DB.execute_command(f'SELECT name FROM course WHERE id = {course[1]}')
+        subn_course_name = ERP_DB.return_results()
+        subn_course_name = subn_course_name[0][0] # type: ignore
+        res.append({"current_course": {"id": course[0], "name": curr_course_name}, "sub_course": {"id": course[1], "name": subn_course_name}})
+    return str(res)
  
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
