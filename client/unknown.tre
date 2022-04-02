@@ -1,8 +1,0 @@
-PAGE
-    Toplevel: Toplevel 0
-        Entry: Entry1  
-        Button: Button2  
-        Entry: Entry2  
-        Label: Label1  
-        Label: Label2  
-

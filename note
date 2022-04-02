@@ -1,0 +1,1 @@
+export $(cat src/conf.env | xargs)

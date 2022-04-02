@@ -1,0 +1,46 @@
+body{
+    margin: 0;  
+    padding: 0;  
+    background: color #f05f0b;  
+    font-family: 'Times New Roman';  
+}
+.Welcome{
+    font-size: large;
+    background: #4e8bec;
+}
+#all{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 10px;
+    border-collapse: collapse;
+}
+.Current{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#curr{
+    border-spacing: 40px;
+}
+.Sub{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#sub{
+    border-spacing: 40px;
+}
+.Add{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#add{
+    border-spacing: 40px;
+}
+.With{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+#with{
+    border-spacing: 40px;
+}
+h1{
+    text-align: center;  
+    color: #277582;  
+    padding: 20px;  
+}

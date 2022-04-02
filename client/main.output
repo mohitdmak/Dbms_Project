@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "D:\PAGE files\main.py", line 137, in <module>
-    main_support.main()
-  File "D:\PAGE files\main_support.py", line 23, in main
-    _w1 = main.Toplevel1
-AttributeError: 'function' object has no attribute 'Toplevel1'
