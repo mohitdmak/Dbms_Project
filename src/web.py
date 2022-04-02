@@ -1,19 +1,23 @@
-from flask import Flask
-from flask import request
+from flask import Flask, jsonify
+from flask import request, redirect
+from flask_cors import CORS, cross_origin
 from core import *
 from connection import *
 
 # Flask app
 app = Flask(__name__)
+CORS(app, supports_credentials = True)
 
 
 # Home route
 @app.route("/", methods=["GET"])
+@cross_origin(supports_credentials = True)
 def home():
-    return "ERP Home"
+    return jsonify({"message": "ERP Home"})
  
 # Student Registration
 @app.route("/register", methods = ["POST", "GET"])
+@cross_origin(supports_credentials = True)
 def register():
     if request.method == "GET":
         return "Please provide a Name(limit 40 chars) and a Unique Username(limit 20 chars) for your account."
@@ -30,6 +34,7 @@ def register():
 
 # Student Login
 @app.route("/login", methods = ["POST", "GET"])
+@cross_origin(supports_credentials = True)
 def login():
     if request.method == "GET":
         return "Please provide your Username(limit 20 chars) and Password(Your ID) for login."
@@ -45,6 +50,7 @@ def login():
 
 # Student's courses
 @app.route("/mycourses/<id>", methods = ["GET"])
+@cross_origin(supports_credentials = True)
 def mycourses(id):
     res = []
     ERP_DB.execute_command(f'SELECT c.id, c.name, c.IC_id, c.capacity FROM course c JOIN takes t ON c.id = t.course_id AND t.student_id = {id}')
@@ -53,10 +59,11 @@ def mycourses(id):
         ERP_DB.execute_command(f'SELECT name FROM teacher WHERE id = {course[2]}')
         ic_name = ERP_DB.return_results()[0][0] # type: ignore
         res.append({"id": course[0], "name": course[1], "IC_ID": course[2], "IC_name": ic_name, "capacity": course[3]})
-    return str(res)
+    return jsonify(res)
 
 # Student withdrawal path
 @app.route("/withdraw/<id>", methods = ["POST", "GET"])
+@cross_origin(supports_credentials = True)
 def withdraw(id):
     if request.method == "GET":
         return "Please provide course is to withdraw from."
@@ -70,6 +77,7 @@ def withdraw(id):
 
 # Student's addition requests
 @app.route("/myadditions/<id>", methods = ["GET"])
+@cross_origin(supports_credentials = True)
 def myadditions(id):
     res = []
     ERP_DB.execute_command(f'SELECT c.id, c.name FROM add_course a INNER JOIN student s INNER JOIN course c ON a.student_id = {id} AND s.id = {id} AND a.course_id = c.id')
@@ -81,6 +89,7 @@ def myadditions(id):
 
 # Student's substitution requests
 @app.route("/mysubstitutions/<id>", methods = ["GET"])
+@cross_origin(supports_credentials = True)
 def mysubstitutions(id):
     res = []
     ERP_DB.execute_command(f'SELECT curr_course_id, subn_course_id FROM sub_course WHERE student_id = {id}')
@@ -99,6 +108,7 @@ def mysubstitutions(id):
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Teacher Registration
 @app.route("/teacher", methods = ["POST", "GET"])
+@cross_origin(supports_credentials = True)
 def teacher():
     if request.method == "GET":
         return "Please provide a Name(limit 40 chars) and a Unique Username(limit 20 chars) for your account."

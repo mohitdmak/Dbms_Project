@@ -16,10 +16,6 @@ async function getapi(url) {
     
     // Storing data in form of JSON
     var data = await response.json();
-    console.log(data);
-    if (response) {
-        hideloader();
-    }
     show(data);
 }
 // Calling that async function
@@ -41,17 +37,18 @@ function show(data) {
          </tr>`;
     
     // Loop to access all rows 
-    for (let r of data.list) {
+    data.forEach((r) => {
         tab += `<tr> 
-    <td>${r.id} </td>
-    <td>${r.name}</td>
-    <td>${r.IC_ID}</td> 
-    <td>${r.IC_name}</td>
-    <td>${r.capacity}</td>          
-</tr>`;
-    }
+        <td>${r.id} </td>
+        <td>${r.name}</td>
+        <td>${r.IC_ID}</td> 
+        <td>${r.IC_name}</td>
+        <td>${r.capacity}</td>          
+        </tr>`;
+    });
     // Setting innerHTML as tab variable
-    document.getElementById("employees").innerHTML = tab;
+    console.log(tab)
+    document.getElementById("tableData").innerHTML = tab;
 }
 </script>
 
