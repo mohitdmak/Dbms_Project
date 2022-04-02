@@ -4,12 +4,61 @@
     <title>Course Registration</title>
     <link rel="stylesheet" type="text/css" href="css/course.css">
 </head>
+<script>
+    const api_url = 
+      "http://localhost:5000/mycourses/10";
+  
+// Defining async function
+async function getapi(url) {
+    
+    // Storing response
+    const response = await fetch(url);
+    
+    // Storing data in form of JSON
+    var data = await response.json();
+    console.log(data);
+    if (response) {
+        hideloader();
+    }
+    show(data);
+}
+// Calling that async function
+getapi(api_url);
+  
+// Function to hide the loader
+function hideloader() {
+    document.getElementById('loading').style.display = 'none';
+}
+// Function to define innerHTML for HTML table
+function show(data) {
+    let tab = 
+        `<tr>
+          <th>ID</th>
+          <th>name</th>
+          <th>Ic ID</th>
+          <th>IC name</th>
+          <th>capacity</th>
+         </tr>`;
+    
+    // Loop to access all rows 
+    for (let r of data.list) {
+        tab += `<tr> 
+    <td>${r.id} </td>
+    <td>${r.name}</td>
+    <td>${r.IC_ID}</td> 
+    <td>${r.IC_name}</td>
+    <td>${r.capacity}</td>          
+</tr>`;
+    }
+    // Setting innerHTML as tab variable
+    document.getElementById("employees").innerHTML = tab;
+}
+</script>
+
 <body>
-    <table id="all" border = 1
->
-        <tr><th></th>
-        <th colspan="2"><div class = "Welcome"><h1>Welcome "NAME"</h1><br></div></th>
-        <th></th>
+    <table id="all" border = 1>
+        <tr>
+        <th colspan  = 2><div class = "Welcome"><h1>Welcome "NAME"</h1><br></div></th>
         </tr>
         <tr>
         <th>
@@ -20,38 +69,16 @@
                     <th>Course ID</th>
                     <th>Course IC</th>
                 </tr>
+                <tbody id="tableData">
+                </tbody>
             </table>
         </th>
         <th>
-        <div class="Sub"><h2>Your Substitution Request</h2></div>
-            <table id="sub">
-                <th>Current Course name</th>
-                <th>Current Course ID</th>
-                <th>Substituted Course name</th>
-                <th>Substituted Course ID</th>
-                <th>Status</th>
+            <table id="buttons" border = 2>
+                <tr><th><button class="button" type = submit>Add courses</button></th></tr>
+                <tr><th><button class="button" type = submit>Witrdraw courses</button></th></tr>
+                <tr><th><button class="button" type = submit>Substitute courses</button></th></tr>
             </table>
-            <input type = "text"><br>
-            <button type="submit">Subtitute Courses</button>
-        </th>
-        <th>
-            <div class="Add"><h2>Your Addition Request</h2></div>
-            <table id="add">
-                <th>Addition Course name</th>
-                <th>Addition Course ID</th>
-                <th>Status</th>
-            </table>
-            <input type = "text"><br>
-            <button type="submit">Add Courses</button>
-        </th>
-        <th>
-        <div class = "With"><h2>Your Withdrawl History</h2></div>
-            <table id="with">
-                <th>Withdrawl Course name</th>
-                <th>Withdrawl Course ID</th>
-            </table>
-            <input type = "text">
-            <button type="submit">Withdraw Courses</button>
         </th>
     </table>
 </body>

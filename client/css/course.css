@@ -2,45 +2,50 @@ body{
     margin: 0;  
     padding: 0;  
     background: color #f05f0b;  
-    font-family: 'Times New Roman';  
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;  
 }
 .Welcome{
     font-size: large;
     background: #4e8bec;
 }
 #all{
+    width : 100%;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 10px;
     border-collapse: collapse;
 }
 .Current{
+    align-items: flex-start;
+    width: 100%;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 #curr{
-    border-spacing: 40px;
+    width: 100%;
+    border: 2;
+    padding: 40px;
 }
-.Sub{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-#sub{
-    border-spacing: 40px;
-}
-.Add{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-#add{
-    border-spacing: 40px;
-}
-.With{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-
-}
-#with{
-    border-spacing: 40px;
+#buttons{
+    padding: 10px;
+    border-spacing: 50px;
+    border: 0;
+    width: 100%
 }
 h1{
     text-align: center;  
     color: #277582;  
     padding: 20px;  
+}
+.button {
+    background-color: #059afd; /* Green */
+    border: none;
+    outline: none;
+    outline-color: aliceblue;
+    border-radius: 17px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
