@@ -58,7 +58,7 @@ class FakeData():
             name = self.fake.job()
             id = self.fake.random_int(
                 min = DB_ATTRS.FIRST_ID, max = DB_WIDE_FAKE.TEACHERS)
-            cap = self.fake.random_int(min = 10, max = 99)
+            cap = self.fake.random_int(min = 20, max = 99)
             print(f"FAKE COURSE: CourseId {i} Name {name} StudentId {id} Capacity {cap}")
             InsertHandler.course(
                 name[:DB_ATTRS.NAME_LIM], id, cap)
@@ -68,10 +68,19 @@ class FakeData():
     def fake_takes(self):
         print("\n   Generating Fake Takes > > > > > > > > > > > > > > > > > > > > > > > >\n")
         for i in range(DB_WIDE_FAKE.STUDENTS):
-            course_id_list = set(self.fake.unique.random_int(
-                min = DB_ATTRS.FIRST_ID, max = DB_WIDE_FAKE.COURSES)
-                for j in range(DB_WIDE_FAKE.TAKES))
-            self.fake.unique.clear()
+            seats_left = 0; course_id_list = set()
+            while seats_left == 0:
+                seats_left = 1
+                course_id_list = set(self.fake.unique.random_int(
+                    min = DB_ATTRS.FIRST_ID, max = DB_WIDE_FAKE.COURSES)
+                    for j in range(DB_WIDE_FAKE.TAKES))
+                self.fake.unique.clear()
+                for course in course_id_list:
+                    ERP_DB.execute_command(f'SELECT seats_left FROM course WHERE id = {course}')
+                    # x = ERP_DB.return_results(); print(x)
+                    if ERP_DB.return_results()[0][0] == 0: # type: ignore
+                    # if x[0][0] == 0: # type: ignore
+                        seats_left = 0
             for course_id in course_id_list:
                 id = i + 1
                 print(f"FAKE TAKE: CourseId {course_id} StudentId {id}")

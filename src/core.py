@@ -65,7 +65,7 @@ class InsertIn():
         """:param1 name :param2 IC_id :param3(Optional) capacity"""
         # Check if a teacher of IC_id exists raise error if not
         if IC_id != "NULL":
-            ERP_DB.execute_command( f'SELECT * FROM teacher where id = {IC_id};')
+            ERP_DB.execute_command(f'SELECT * FROM teacher where id = {IC_id};')
             if len(ERP_DB.return_results()) == 0:
                 raise ProgERROR(f"No IC. Teacher of id {IC_id} exists!")
         # Check value limits of name and capacity
@@ -74,20 +74,20 @@ class InsertIn():
         if capacity > 99:
             raise ProgERROR(f"Capacity(course) crosses limit 99: {capacity}")
         ERP_DB.execute_command(
-            f'INSERT INTO course(name, capacity, IC_id) VALUES ("{name}", "{capacity}", {IC_id});'
+            f'INSERT INTO course(name, capacity, seats_left, IC_id) VALUES ("{name}", "{capacity}", {capacity}, {IC_id});'
         )
 
     def assists(self, teacher_id, course_id):
         """:param1 teacher_id :param2 course_id"""
         # Check if a teacher of IC_id exists raise error if not
-        ERP_DB.execute_command( f'SELECT * FROM teacher where id = {teacher_id};')
+        ERP_DB.execute_command(f'SELECT * FROM teacher where id = {teacher_id};')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"No Assist. Teacher of id {teacher_id} exists!")
         # Check if a course of course_id exists raise error if not
         ERP_DB.execute_command( f'SELECT * FROM course where id = {course_id};')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"No Assist. Course of id {course_id} exists!")
-        ERP_DB.execute_command( f'SELECT * FROM assists where teacher_id = {teacher_id} and course_id = {course_id};')
+        ERP_DB.execute_command(f'SELECT * FROM assists where teacher_id = {teacher_id} and course_id = {course_id};')
         if len(ERP_DB.return_results()) != 0:
             raise ProgERROR(f"Duplicate insertion into Assist. Teacherid {teacher_id} Courseid {course_id}!")
         ERP_DB.execute_command(
@@ -97,18 +97,25 @@ class InsertIn():
     def takes(self, student_id, course_id):
         """:param1 student_id :param2 course_id"""
         # Check if a student of student_id exists raise error if not
-        ERP_DB.execute_command( f'SELECT * FROM student where id = {student_id};')
+        ERP_DB.execute_command(f'SELECT * FROM student where id = {student_id};')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"No Takes. Student of id {student_id} exists!")
         # Check if a course of course_id exists raise error if not
-        ERP_DB.execute_command( f'SELECT * FROM course where id = {course_id};')
+        ERP_DB.execute_command(f'SELECT * FROM course where id = {course_id};')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"No Takes. Course of id {course_id} exists!")
-        ERP_DB.execute_command( f'SELECT * FROM takes where student_id = {student_id} and course_id = {course_id};')
+        ERP_DB.execute_command(f'SELECT seats_left FROM course WHERE id = {course_id}')
+        if ERP_DB.return_results()[0][0] == 0: # type: ignore
+            raise ProgERROR(f'No Seats left in Course {course_id} for takes. Studentid {student_id} Courseid {course_id}')
+        ERP_DB.execute_command(f'SELECT * FROM takes where student_id = {student_id} and course_id = {course_id};')
         if len(ERP_DB.return_results()) != 0:
             raise ProgERROR(f"Duplicate insertion into Takes. Studentid {student_id} Courseid {course_id}!")
+        # USE TRANSACTIONS HERE ATOMIC
         ERP_DB.execute_command(
             f'INSERT INTO takes(student_id, course_id) VALUES ("{student_id}", "{course_id}");'
+        )
+        ERP_DB.execute_command(
+            f'UPDATE course SET seats_left = seats_left - 1 WHERE id = {course_id}'
         )
 
     def addn_course(self, student_id, course_id):
@@ -126,6 +133,23 @@ class InsertIn():
             raise ProgERROR(f"Duplicate insertion into Add_course. Studentid {student_id} Courseid {course_id}!")
         ERP_DB.execute_command(
             f'INSERT INTO add_course(student_id, course_id) VALUES ("{student_id}", "{course_id}");'
+        )
+
+    def withdraw_course(self, student_id, course_id):
+        """:param1 student_id :param2 course_id"""
+        # Check if a student of student_id exists raise error if not
+        ERP_DB.execute_command( f'SELECT * FROM student where id = {student_id};')
+        if len(ERP_DB.return_results()) == 0:
+            raise ProgERROR(f"No Add_course. Student of id {student_id} exists!")
+        # Check if a course of course_id exists raise error if not
+        ERP_DB.execute_command( f'SELECT * FROM course where id = {course_id};')
+        if len(ERP_DB.return_results()) == 0:
+            raise ProgERROR(f"No Withdraw_Course. Course of id {course_id} exists!")
+        ERP_DB.execute_command( f'SELECT * FROM withdraw_course where student_id = {student_id} and course_id = {course_id};')
+        if len(ERP_DB.return_results()) != 0:
+            raise ProgERROR(f"Duplicate insertion into Withdraw_course. Studentid {student_id} Courseid {course_id}!")
+        ERP_DB.execute_command(
+            f'INSERT INTO withdraw_course(student_id, course_id) VALUES ("{student_id}", "{course_id}");'
         )
 
     def subn_course(self, student_id, curr_course_id, subn_course_id):

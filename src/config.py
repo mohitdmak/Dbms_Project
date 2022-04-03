@@ -12,7 +12,7 @@ class DB_ATTRS:
 
 class DB_WIDE_FAKE:
     TEACHERS     = 15
-    COURSES      = 15
+    COURSES      = 20
     CURR_COURSES = 8
     STUDENTS     = 100
     TAKES        = 8

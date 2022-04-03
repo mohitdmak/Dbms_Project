@@ -8,10 +8,11 @@ CREATE TABLE teacher(
 
 DROP TABLE IF EXISTS `course`;
 CREATE TABLE course(
-	id       INT                           NOT NULL AUTO_INCREMENT,
-	name     VARCHAR(40)  DEFAULT 'Course' NOT NULL,
-	capacity FLOAT(2,0)   DEFAULT 50       NOT NULL,
-	IC_id    INT,
+	id         INT                           NOT NULL AUTO_INCREMENT,
+	name       VARCHAR(40)  DEFAULT 'Course' NOT NULL,
+	capacity   FLOAT(2,0)   DEFAULT 20       NOT NULL,
+    seats_left FLOAT(2,0)   DEFAULT 20       NOT NULL,
+	IC_id      INT,
 	PRIMARY KEY (id),
     FOREIGN KEY (IC_id) REFERENCES teacher(id) ON DELETE SET NULL
 ) AUTO_INCREMENT = 0;
@@ -60,4 +61,13 @@ CREATE TABLE sub_course(
     FOREIGN KEY (student_id)      REFERENCES student(id) ON DELETE CASCADE,
     FOREIGN KEY (curr_course_id)  REFERENCES course(id)  ON DELETE CASCADE,
     FOREIGN KEY (subn_course_id)  REFERENCES course(id)  ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS `withdraw_course`;
+CREATE TABLE withdraw_course(
+    course_id  INT NOT NULL,
+    student_id INT NOT NULL,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id)  REFERENCES course(id) ON DELETE CASCADE
 );
