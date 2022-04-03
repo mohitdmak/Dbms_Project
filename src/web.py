@@ -27,10 +27,10 @@ def register():
         try:
             InsertHandler.student(name, username)
             ERP_DB.execute_command(f'SELECT id FROM student WHERE username = "{username}"')
-            return str((ERP_DB.return_results())[0][0]) # type: ignore
+            return jsonify({"id": ((ERP_DB.return_results())[0][0])}) # type: ignore
         except ProgERROR as err:
             # print(err.msg)
-            return str(-1)
+            return jsonify({"id": -1})
 
 # Student Login
 @app.route("/login", methods = ["POST", "GET"])
@@ -44,9 +44,10 @@ def login():
         try:
             ERP_DB.execute_command(f'SELECT id FROM student WHERE username = "{username}" AND id = {id}')
             res = ERP_DB.return_results()
-            return str(res[0][0]) if len(res) == 1 else str(-1) # type: ignore
+            id = (res[0][0]) if len(res) == 1 else (-1) # type: ignore
+            return jsonify({"id": id})
         except ProgERROR as err:
-            return str(-1)
+            return jsonify({"id": -1})
 
 # Student's courses
 @app.route("/mycourses/<id>", methods = ["GET"])
@@ -66,14 +67,17 @@ def mycourses(id):
 @cross_origin(supports_credentials = True)
 def withdraw(id):
     if request.method == "GET":
-        return "Please provide course is to withdraw from."
+        return "Please provide course id to withdraw from."
     else:
         course_id = request.form["Course"]
         try:
+            ERP_DB.execute_command(f'SELECT * FROM takes WHERE student_id = {id} AND course_id = {course_id}')
+            result = ERP_DB.return_results()
+            result = result[0][0] if len(result) == 1 else -1 # type: ignore
             DeleteHandler.genByConds("takes", student_id = id, course_id = course_id)
-            return str(1)
+            return jsonify({"result": result})
         except:
-            return str(-1)
+            return jsonify({"result": -1})
 
 # Student's addition requests
 @app.route("/myadditions/<id>", methods = ["GET"])
@@ -85,7 +89,7 @@ def myadditions(id):
     print(db_res)
     for course in db_res:
         res.append({"id": course[0], "name": course[1]})
-    return str(res)
+    return jsonify(res)
 
 # Student's substitution requests
 @app.route("/mysubstitutions/<id>", methods = ["GET"])
@@ -102,7 +106,7 @@ def mysubstitutions(id):
         subn_course_name = ERP_DB.return_results()
         subn_course_name = subn_course_name[0][0] # type: ignore
         res.append({"current_course": {"id": course[0], "name": curr_course_name}, "sub_course": {"id": course[1], "name": subn_course_name}})
-    return str(res)
+    return jsonify(res)
  
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
