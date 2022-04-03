@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <title>Substitution of Courses</title>
+        <link rel = "stylesheet" type="text/css" href="css/sub.css">
+    </head>
+    
+    <script>
+        
+    const api_url = 
+      "http://localhost:5000/mysubstitutions/2";
+  
+// Defining async function
+async function getapi(url) {
+    
+    // Storing response
+    const response = await fetch(url);
+    
+    // Storing data in form of JSON
+    var data = await response.json();
+    console.log(data);
+    show(data);
+}
+
+getapi(api_url);
+
+  
+// Function to define innerHTML for HTML table
+function show(data) {
+    let tabCurr = ``;
+    let tabSub = ``;
+    data.forEach((r) => {
+        tabCurr+= `<tr>
+        <th>${r.current_course.id}</th>
+        <th>${r.current_course.name}</th>
+        </tr>`;
+
+        tabSub += `<tr>
+        <th>${r.sub_course.id}</th>
+        <th>${r.sub_course.name}</th>
+        </tr>`;
+    });
+    // Setting innerHTML as tab variable
+    console.log(tabCurr)
+    console.log(tabSub)
+    document.getElementById("CurrBody").innerHTML = tabCurr;
+    document.getElementById("SubBody").innerHTML = tabSub;
+}
+    </script>
+    
+    <body>
+        <table id="substitution" border="2">
+            <tr><th><h1>Your Substitution Courses</h1></th></tr>
+            <tr><th>
+                <table id="subMainHead">
+                <thead>
+                    <tr>
+                        <th>Current Course(s)</th>
+                        <th>Substituted Course(s)</th>
+                    </tr>
+                </thead>
+
+                <tbody id="subMainBody">
+                    <tr><th>
+                    <table id="CurrCour">
+                        <tr><th>
+                        <thead id="CurrHead" >
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        </th></tr>
+                        <tbody id="CurrBody">
+
+                        </tbody>
+                    </table>
+                    </th>
+                    <th>
+                    <table id="SubCour">
+                        <thead id="SubHead">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="SubBody">
+
+                        </tbody>
+
+                    </table>
+                    </th></tr>
+                </tbody>
+                </table>
+            </th></tr>
+            <tr><th>
+                Enter Course ID you want to add : <input type="number" id="input"><br></input>
+            </th></tr>
+            <tr><th>
+                <table id="chosenCourse">
+
+                </table>
+            </th></tr>
+        </table>
+    </body>
+</html>

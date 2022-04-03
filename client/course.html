@@ -6,7 +6,7 @@
 </head>
 <script>
     const api_url = 
-      "http://localhost:5000/mycourses/10";
+      "http://localhost:5000/mycourses/1";
   
 // Defining async function
 async function getapi(url) {
@@ -18,25 +18,10 @@ async function getapi(url) {
     var data = await response.json();
     show(data);
 }
-// Calling that async function
 getapi(api_url);
-  
-// Function to hide the loader
-function hideloader() {
-    document.getElementById('loading').style.display = 'none';
-}
-// Function to define innerHTML for HTML table
+
 function show(data) {
-    let tab = 
-        `<tr>
-          <th>ID</th>
-          <th>name</th>
-          <th>Ic ID</th>
-          <th>IC name</th>
-          <th>capacity</th>
-         </tr>`;
-    
-    // Loop to access all rows 
+    let tab = ``;
     data.forEach((r) => {
         tab += `<tr> 
         <td>${r.id} </td>
@@ -61,20 +46,43 @@ function show(data) {
         <th>
         <div class = "Current"><h2>Your Current Courses</h2></div>
             <table id="curr">
+                <thead id = "thead">
                 <tr>
-                    <th>Course name</th>
                     <th>Course ID</th>
-                    <th>Course IC</th>
+                    <th>Course name</th>
+                    <th>Course IC ID</th>
+                    <th>Course IC name</th>
+                    <th>Capacity</th>
                 </tr>
+                </thead>
+
                 <tbody id="tableData">
                 </tbody>
             </table>
         </th>
         <th>
             <table id="buttons" border = 2>
-                <tr><th><button class="button" type = submit>Add courses</button></th></tr>
-                <tr><th><button class="button" type = submit>Witrdraw courses</button></th></tr>
-                <tr><th><button class="button" type = submit>Substitute courses</button></th></tr>
+                <tr><th><button id="AddButton" class="button" >Add Courses</button>
+
+                    <script type="text/javascript">
+                        document.getElementById("AddButton").onclick = function () {
+                            location.href = "file:///D:/Dbms_Project/client/add.html";
+                        };
+                    </script></th></tr>
+                <tr><th><button id="WithButton" class="button" >Withdraw Courses</button>
+
+                    <script type="text/javascript">
+                        document.getElementById("WithButton").onclick = function () {
+                            location.href = "file:///D:/Dbms_Project/client/with.html";
+                        };
+                    </script></th></tr>
+                <tr><th><button id="SubButton" class="button" >Substitute Courses</button>
+
+                    <script type="text/javascript">
+                        document.getElementById("SubButton").onclick = function () {
+                            location.href = "file:///D:/Dbms_Project/client/sub.html";
+                        };
+                    </script></th></tr>
             </table>
         </th>
     </table>

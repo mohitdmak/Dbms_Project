@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Withdrawl of Courses</title>
+        <link rel = "stylesheet" type="text/css" href="css/add.css">
+    </head>
+    
+    <script>
+        
+    const api_url = 
+      "http://localhost:5000/withdraw/2";
+  
+// Defining async function
+async function getapi(url) {
+    
+    // Storing response
+    const response = await fetch(url);
+    
+    // Storing data in form of JSON
+    var data = await response.json();
+    show(data);
+}
+
+getapi(api_url);
+  
+// Function to define innerHTML for HTML table
+function show(data) {
+    let tab = ''
+    data.forEach((r) => {
+        tab += `<tr> 
+        <th>${r.id} </th>
+        <th>${r.name}</th>       
+        </tr>`;
+    });
+    // Setting innerHTML as tab variable
+    console.log(tab)
+    document.getElementById("addCourse").innerHTML = tab;
+}
+    </script>
+    
+    <body>
+        <table id="addition" border="2">
+            <tr><th><h1>Your Withdrawn Courses</h1></th></tr>
+            <tr><th>
+                <table class="addHead">
+                <thead>
+                    <tr>
+                        <th>Withdrawn Course ID</th>
+                        <th>Withdrawn Course Name</th>
+                    </tr>
+                </thead>
+
+                <tbody id="addCourse">
+
+                </tbody>
+                </table>
+            </th></tr>
+            <tr><th>
+                Enter Course ID you want to add : <input type="number" id="input"><br></input>
+            </th></tr>
+            <tr><th>
+                <table id="chosenCourse">
+
+                </table>
+            </th></tr>
+        </table>
+    </body>
+</html>
