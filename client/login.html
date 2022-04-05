@@ -2,31 +2,39 @@
 <html>    
 <head>    
     <title>Login Form</title>    
-    <link rel="stylesheet" type="text/css" href="css/login.css">    
-</head>    
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src = "test.js" defer></script>
+</head>
+
 <body>
     <div class ="Page">    
     <h2>Login Page</h2><br>    
     <div class="login">    
-    <form id="login" method="get" action="login.php">    
+        
         <label><b>User Name     
-        </b>    
+        </b><br>    
         </label>    
-        <input type="text" name="Uname" id="Uname" placeholder="Username">    
+        <input type="text" id="Username" placeholder="Username">    
         <br><br>    
+
         <label><b>Password     
-        </b>    
-        </label>    
-        <input type="Password" name="Pass" id="Pass" placeholder="Password">    
-        <br><br>    
-        <input type="button" name="log" id="log" value="Log In Here">       
-        <br><br>    
-        <input type="checkbox" id="check">    
-        <span>Remember me</span>    
-        <br><br>    
-        <a href="#">Forgot Password</a>    
-    </form>     
-</div>
-</div>    
+        </b><br>    
+        </label>
+
+        <input type="text" id="Password" placeholder="Password">    
+        <br><br>
+
+
+        <br><br>
+        
+        <input type="submit" class="Log" id="Log">
+
+        
+        <input type="button" id="register" placeholder="Register">
+       
+        <br><br>
+        <div id="res"></div>
+    </div></div>
 </body>    
 </html>  
