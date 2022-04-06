@@ -6,12 +6,13 @@ from connection import *
 
 # Flask app
 app = Flask(__name__)
-CORS(app, supports_credentials = True)
-
+cors = CORS(app);
+#CORS(app, supports_credentials = True)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Home route
 @app.route("/", methods=["GET"])
-@cross_origin(supports_credentials = True)
+@cross_origin()
 def home():
     return jsonify({"message": "ERP Home"})
  
@@ -34,13 +35,16 @@ def register():
 
 # Student Login
 @app.route("/login", methods = ["POST", "GET"])
-@cross_origin(supports_credentials = True)
+@cross_origin()
 def login():
     if request.method == "GET":
         return "Please provide your Username(limit 20 chars) and Password(Your ID) for login."
     else:
-        username = request.form["Username"]
-        id = request.form["Password"]
+        print(request)
+        content = request.get_json()
+        username = content['Username']
+        id = content['Password']
+        print(id);
         try:
             ERP_DB.execute_command(f'SELECT id FROM student WHERE username = "{username}" AND id = {id}')
             res = ERP_DB.return_results()
