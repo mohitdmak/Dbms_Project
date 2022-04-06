@@ -1,40 +1,42 @@
-const loginButn = document.getElementById("Log");
-const regBtn = document.getElementById("register");
-const Username = document.getElementById("Username");
-const Password = document.getElementById("Password");
 
-var bodyFormData = new FormData();
-bodyFormData.append("Username", Username);
-bodyFormData.append("Password", Password);
-const getdata = () => {
-    axios({
-        method: 'post',
-        url: 'http://localhost:5000/login',
-        data: bodyFormData
-        })
-        .then(function (response) {
-            //handle success
-            console.log(response);
-        })
-        .catch(function (response) {
-            //handle error
-            console.log(response);
-        });
-        /*axios.post("http://localhost:5000/login", {
-            Username: `${Username}`,
-            Password: `${Password}`
-        }).then(response=>{
-            console.log(response);
-        });8?
-        /*axios.get("http://localhost:5000/login").then(response =>{
-            console.log(response);
-            showOutput(response)
-        });*/
-    };
 
-function showOutput(res){
-    document.querySelector("#res").innerHTML = `
-        <h1> Here is the data: ${res.header}</h1>`
+console.log("INCLUDED")
+function onSubmit(){
+    
+    const username = document.getElementById("Username").value;
+    const password = document.getElementById("Password").value;
+    document.getElementById("Username").value = "";
+    document.getElementById("Password").value = "";
+    
+
+    let config = {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      }
+      
+      let data = {Username: username, Password: password};
+
+      let URL = 'http://localhost:5000/login';
+      
+      axios.post(URL, data, config)
+      .then( res => {
+
+          if(parseInt(res.data.id) > 0){
+            console.log(res.data);
+            localStorage.setItem("ID", res.data.id);
+            console.log(localStorage);
+            location.href = 'http://127.0.0.1:5500/client/course.html'
+          }
+          else{
+              alert("WARNING!: Wrong Username or Password Entered");
+              location.href = 'http://127.0.0.1:5500/client/test.html'
+          }
+        })
+        .catch(e => console.log(e));
 }
 
-loginButn.addEventListener('click', getdata);
+function goRegister(){
+    location.href = "http://127.0.0.1:5500/client/register.html";
+}

@@ -5,8 +5,9 @@
     <link rel="stylesheet" type="text/css" href="css/course.css">
 </head>
 <script>
+    const ID = parseInt(localStorage.getItem("ID"))
     const api_url = 
-      "http://localhost:5000/mycourses/1";
+      `http://localhost:5000/mycourses/${ID}`;
   
 // Defining async function
 async function getapi(url) {
@@ -31,7 +32,7 @@ function show(data) {
         <td>${r.capacity}</td>          
         </tr>`;
     });
-    // Setting innerHTML as tab variable
+    
     console.log(tab)
     document.getElementById("tableData").innerHTML = tab;
 }
@@ -66,21 +67,21 @@ function show(data) {
 
                     <script type="text/javascript">
                         document.getElementById("AddButton").onclick = function () {
-                            location.href = "file:///D:/Dbms_Project/client/add.html";
+                            location.href = 'http://127.0.0.1:5500/client/add.html';
                         };
                     </script></th></tr>
                 <tr><th><button id="WithButton" class="button" >Withdraw Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("WithButton").onclick = function () {
-                            location.href = "file:///D:/Dbms_Project/client/with.html";
+                            location.href = 'http://127.0.0.1:5500/client/with.html';
                         };
                     </script></th></tr>
                 <tr><th><button id="SubButton" class="button" >Substitute Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("SubButton").onclick = function () {
-                            location.href = "file:///D:/Dbms_Project/client/sub.html";
+                            location.href = 'http://127.0.0.1:5500/client/sub.html';
                         };
                     </script></th></tr>
             </table>

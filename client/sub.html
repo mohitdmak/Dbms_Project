@@ -6,8 +6,9 @@
     
     <script>
         
+    const ID = parseInt(localStorage.getItem("ID"));
     const api_url = 
-      "http://localhost:5000/mysubstitutions/2";
+      `http://localhost:5000/mysubstitutions/${ID}`;
   
 // Defining async function
 async function getapi(url) {
@@ -93,7 +94,8 @@ function show(data) {
                 </table>
             </th></tr>
             <tr><th>
-                Enter Course ID you want to add : <input type="number" id="input"><br></input>
+                Enter Course ID you want to Substitute :<br> <br>From:<input type="number" id="inputFrom"></input>
+                    <br><br>To:<input type="number" id="inputTo"><br><br><button id="addButton">Substitute</button>
             </th></tr>
             <tr><th>
                 <table id="chosenCourse">

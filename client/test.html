@@ -4,36 +4,34 @@
     <title>Login Form</title>    
     <link rel="stylesheet" type="text/css" href="css/login.css">
     <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    <script src = "test.js" defer></script>
-</head>
-
+    <script src="./test.js"></script>
 <body>
     <div class ="Page">    
     <h2>Login Page</h2><br>    
     <div class="login">    
-        <label><b>User Name     
+        <form id="login">
+        <label><b>Username     
         </b><br>    
         </label>    
-        <input type="text" id="Username" placeholder="Username">    
+        <input type="text" name="Username" id="Username" placeholder="Username">    
         <br><br>    
 
         <label><b>Password     
         </b><br>    
         </label>
 
-        <input type="text" id="Password" placeholder="Password">    
+        <input type="text" name="Password" id="Password" placeholder="Password">    
         <br><br>
 
+    </form>
 
         <br><br>
-        
-        <input type="button" class="Log" id="Log" name="Submit" onclick=getdata>
-
-        
-        <input type="button" id="register" placeholder="Register">
+        <input type="button" id="register" placeholder="Register" onclick="goRegister()">
        
         <br><br>
         <div id="res"></div>
+
+        <button class="Log" id="Log" onclick="onSubmit()">Submit</button>
     </div></div>
 </body>    
 </html>  

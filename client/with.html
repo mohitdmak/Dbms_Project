@@ -5,9 +5,9 @@
     </head>
     
     <script>
-        
-    const api_url = 
-      "http://localhost:5000/withdraw/2";
+        const ID = parseInt(localStorage.getItem("ID"));
+        const api_url = 
+            `http://localhost:5000/withdraw/${ID}`;
   
 // Defining async function
 async function getapi(url) {
