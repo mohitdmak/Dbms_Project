@@ -23,8 +23,13 @@ def register():
     if request.method == "GET":
         return "Please provide a Name(limit 40 chars) and a Unique Username(limit 20 chars) for your account."
     else:
-        name = request.form["Name"]
-        username = request.form["Username"]
+        print(request)
+        content = request.get_json()
+        username = content['Username']
+        name = content['Name']
+        print(name);
+        #name = request.form["Name"]
+        #username = request.form["Username"]
         try:
             InsertHandler.student(name, username)
             ERP_DB.execute_command(f'SELECT id FROM student WHERE username = "{username}"')
