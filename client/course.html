@@ -5,8 +5,10 @@
     <title>Course Registration</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 </head>
 <script>
+    const Username = localStorage.getItem("Name");
     const ID = parseInt(localStorage.getItem("ID"))
     const api_url = 
       `http://localhost:5000/mycourses/${ID}`;
@@ -36,58 +38,78 @@ function show(data) {
     });
     
     console.log(tab)
-    document.getElementById("tableData").innerHTML = tab;
+    document.getElementById("table").innerHTML = tab;
+    console.log(Username);
+    document.getElementById("Welcome").innerHTML = `<h1>Welcome ${Username}</h1>`;
 }
 </script>
+<style>
+    body {
+        animation: fadeInAnimation ease 3s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fadeInAnimation {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
 
-<body>
-    <table id="all" border = 1>
+<body><div class="table table-responsive">
+    <table id="all" class="table w-100 table-dark table-striped">
         <tr>
-        <th colspan  = 2><div class = "Welcome"><h1>Welcome "NAME"</h1><br></div></th>
+        <td class="text-center" class="text-centre"><div class = "Welcome" id="Welcome"><h1></h1><br></div></td>
         </tr>
         <tr>
-        <th>
-        <div class = "Current"><h2>Your Current Courses</h2></div>
-            <table id="curr" class="table">
+        <td class = "text-center">
+        <h4>Your Current Courses</h4><div class = "table table-responsive w-100"></div>
+            <table id="curr" class="table table-dark table-striped">
                 <thead id = "thead" class="thead-dark">
                 <tr>
-                    <th>Course ID</th>
-                    <th>Course name</th>
-                    <th>Course IC ID</th>
-                    <th>Course IC name</th>
-                    <th>Capacity</th>
+                    <td class = "text-center">Course ID</td>
+                    <td class = "text-center">Course name</td>
+                    <td class = "text-center">Course IC ID</td>
+                    <td class = "text-center">Course IC name</td>
+                    <td class = "text-center">Capacity</td>
                 </tr>
                 </thead>
 
-                <tbody id="tableData">
+                <tbody id="table">
+
                 </tbody>
             </table>
-        </th>
-        <th>
-            <table id="buttons" border = 2>
-                <tr><th><button id="AddButton" class="button" >Add Courses</button>
+        </div>
+        </td></tr>
+        <tr><div class="table table-responsive">
+        <td class = "item-center">
+            <table id="buttons" class="table table-responsive w-100 table-borderless">
+                <tr><td class = "text-center"><button id="AddButton" class="btn btn-outline-info btn-sm" >Add Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("AddButton").onclick = function () {
                             location.href = 'http://127.0.0.1:5500/client/add.html';
                         };
-                    </script></th></tr>
-                <tr><th><button id="WithButton" class="button" >Withdraw Courses</button>
+                    </script></td></tr>
+                <tr><td class = "text-center"><button id="WithButton" class="btn btn-outline-info btn-sm" >Withdraw Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("WithButton").onclick = function () {
                             location.href = 'http://127.0.0.1:5500/client/with.html';
                         };
-                    </script></th></tr>
-                <tr><th><button id="SubButton" class="button" >Substitute Courses</button>
+                    </script></td></tr>
+                <tr><td class = "text-center"><button id="SubButton" class="btn btn-outline-info btn-sm" >Substitute Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("SubButton").onclick = function () {
                             location.href = 'http://127.0.0.1:5500/client/sub.html';
                         };
-                    </script></th></tr>
+                    </script></td></tr>
             </table>
-        </th>
-    </table>
+        </td></div></tr>
+    </table></div>
 </body>
 </html>

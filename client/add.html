@@ -29,8 +29,8 @@ function show(data) {
     let tab = ``;
     data.forEach((r) => {
         tab += `<tr> 
-        <th>${r.id} </th>
-        <th>${r.name}</th>       
+        <td class = "text-center">${r.id} </td>
+        <td class = "text-center">${r.name}</td>       
         </tr>`;
     });
     // Setting innerHTML as tab variable
@@ -38,16 +38,31 @@ function show(data) {
     document.getElementById("addCourse").innerHTML = tab;
 }
     </script>
+<style>
+    body {
+        animation: fadeInAnimation ease 3s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fadeInAnimation {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
     
-    <body>
-        <table id="addition" class="container-fluid .text-center d-lg-inline-flex">
-            <tr><th colspan=2></th><h1>Your Addition Courses</h1></th></tr>
-            <tr><th>
-                <table class=".text-center cell table table-striped table-dark table-borderless table-hover">
+    <body><div class="table table-responsive w-100">
+        <table id="addition" class="table w-100">
+            <tr><td class="text-center"><h1>Your Addition Courses</h1></td></tr>
+            <tr><td class = "text-center">
+                <table class=".text-center cell table table-striped table-dark table-hover">
                 <thead class="thead-head">
                     <tr>
-                        <th>Addition Course ID</th>
-                        <th>Addition Course Name</th>
+                        <td class = "text-center"><h4>Addition Course ID</h4></td>
+                        <td class = "text-center"><h4>Addition Course Name</h4></td>
                     </tr>
                 </thead>
 
@@ -55,16 +70,16 @@ function show(data) {
 
                 </tbody>
                 </table>
-            </th></tr>
-            <tr><th>
-                Enter Course ID you want to add : <input type="number" id="input"><br><button id="AddButton" class="btn btn-outline-info btn-sm" onclick="addCourse()">Add
-                    </button></input>
-            </th></tr>
-            <tr><th>
-                <table id="chosenCourse">
+            </td></tr>
+            <tr><td class = "text-center">
+                <table id="chosenCourse" border = 0>
 
                 </table>
-            </th></tr>
-        </table>
+            </td></tr>
+            <tr><td class = "text-center">
+                Enter Course ID you want to add : <input type="number" id="input"><br><button id="AddButton" class="btn btn-outline-info btn-sm" onclick="addCourse()">Add
+                    </button></input>
+            </td></tr>
+        </table></div>
     </body>
 </html>
