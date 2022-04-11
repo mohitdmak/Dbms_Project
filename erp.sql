@@ -1,3 +1,4 @@
+/* > > > > > > > > > > > > > CREATING TABLES > > > > > > > > > > > > > */
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE teacher(
 	id       INT                           NOT NULL AUTO_INCREMENT,
@@ -71,3 +72,189 @@ CREATE TABLE withdraw_course(
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id)  REFERENCES course(id) ON DELETE CASCADE
 );
+/* > > > > > > > > > > > > > CREATED TABLES > > > > > > > > > > > > > */
+
+
+/* > > > > > > > > > > > > > CREATING PROCEDURES > > > > > > > > > > > > > */
+SET AUTOCOMMIT = 0;
+
+DROP PROCEDURE IF EXISTS `addStudent`;
+DELIMITER $$
+CREATE PROCEDURE `addStudent` (IN name VARCHAR(40), IN username VARCHAR(20))
+    MODIFIES SQL DATA
+    COMMENT 'Add student with unique username'
+BEGIN
+    START TRANSACTION;
+    IF LENGTH(name) <= 40 AND LENGTH(username) <= 20 THEN
+        IF NOT EXISTS(SELECT * FROM student WHERE 'username' = username) THEN
+            INSERT INTO student(`name`, `username`) VALUES (name, username);
+            COMMIT;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addTeacher`;
+DELIMITER $$
+CREATE PROCEDURE `addTeacher` (IN name VARCHAR(40), IN username VARCHAR(20))
+    MODIFIES SQL DATA
+    COMMENT 'Add teacher with unique username'
+BEGIN
+    START TRANSACTION;
+    IF LENGTH(name) <= 40 AND LENGTH(username) <= 20 THEN
+        IF NOT EXISTS(SELECT * FROM teacher WHERE 'username' = username) THEN
+            INSERT INTO teacher(`name`, `username`) VALUES (name, username);
+            COMMIT;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+DELIMITER ;
+    
+DROP PROCEDURE IF EXISTS `addCourse`;
+DELIMITER $$
+CREATE PROCEDURE `addCourse` (IN name VARCHAR(40), IN IC_id INT, IN capacity FLOAT(2,0))
+    MODIFIES SQL DATA
+    COMMENT 'Add a new course'
+BEGIN
+    START TRANSACTION;
+    IF LENGTH(name) <= 40 AND capacity < 100 THEN
+        SELECT IC_id;
+        SELECT ISNULL(IC_id);
+        SELECT * FROM teacher WHERE id = IC_id;
+        IF (NOT ISNULL(IC_id) AND EXISTS(SELECT * FROM teacher WHERE id = IC_id)) OR (ISNULL(IC_id)) THEN 
+            INSERT INTO course(`name`, `capacity`, `seats_left`, `IC_id`) VALUES (name, capacity, capacity, IC_id);
+            COMMIT;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addTakes`;
+DELIMITER $$
+CREATE PROCEDURE `addTakes` (IN student_id INT, IN course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Add a new takes relation between student and course'
+BEGIN
+    START TRANSACTION;
+    IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
+        IF (SELECT seats_left FROM course WHERE id = course_id) > 0 THEN
+            IF NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+                INSERT INTO takes(`student_id`, `course_id`) VALUES (student_id, course_id);
+                UPDATE course SET seats_left = seats_left - 1 WHERE id = course_id;
+                COMMIT;
+            ELSE 
+                ROLLBACK;
+            END IF;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addAssists`;
+DELIMITER $$
+CREATE PROCEDURE `addAssists` (IN teacher_id INT, IN course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Add a new assistant teacher and course relation'
+BEGIN
+    START TRANSACTION;
+    IF EXISTS(SELECT * FROM teacher WHERE id = teacher_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
+        IF NOT EXISTS(SELECT * FROM assists WHERE 'teacher_id' = teacher_id AND 'course_id' = course_id) THEN
+            INSERT INTO assists(`teacher_id`, `course_id`) VALUES (teacher_id, course_id);            
+            COMMIT;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addAdditions`;
+DELIMITER $$
+CREATE PROCEDURE `addAdditions` (IN student_id INT, IN course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Adds a new addition request for a student'
+BEGIN
+    START TRANSACTION;
+    IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
+        IF NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+            IF NOT EXISTS(SELECT * FROM add_course WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+                INSERT INTO add_course(student_id, course_id) VALUES (student_id, course_id); 
+                COMMIT;
+            ELSE
+                ROLLBACK;
+            END IF;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addSubstitutions`;
+DELIMITER $$
+CREATE PROCEDURE `addSubstitutions` (IN student_id INT, IN curn_course_id INT, IN subn_course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Adds a new substitution request for a student'
+BEGIN
+    START TRANSACTION;
+    IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = curn_course_id) AND EXISTS(SELECT * FROM course WHERE id = subn_course_id) THEN
+        IF EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = curn_course_id) AND NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = subn_course_id)THEN
+            IF NOT EXISTS(SELECT * FROM sub_course WHERE 'student_id' = student_id AND 'curn_course_id' = curn_course_id AND 'subn_course_id' = subn_course_id) THEN
+                INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES (student_id, curr_course_id, subn_course_id);
+                COMMIT;
+            ELSE
+                ROLLBACK;
+            END IF;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END $$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `addWithdraw`;
+DELIMITER $$
+CREATE PROCEDURE `addWithdraw` (IN student_id INT, IN course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Add a new takes relation between student and course'
+BEGIN
+    START TRANSACTION;
+    IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
+        IF EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+            IF NOT EXISTS(SELECT * FROM withdraw_course WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+                INSERT INTO withdraw_course(student_id, course_id) VALUES (student_id, course_id);
+                COMMIT;
+            ELSE 
+                ROLLBACK;
+            END IF;
+        ELSE
+            ROLLBACK;
+        END IF;
+    ELSE
+        ROLLBACK;
+    END IF;
+END$$
+DELIMITER ;
+/* > > > > > > > > > > > > > CREATED PROCEDURES > > > > > > > > > > > > > */
