@@ -144,8 +144,25 @@ function displayCourse(){
 
     axios.post(URL, data, config)
     .then(res=>{
-        console.log(res.data)
+        console.log(res.data);
+
+        let empty = ``;
+        let tab = ``;
+
+        res.forEach(r=>{
+          tab += `<tr> 
+        <td>${r.id} </td>
+        <td>${r.name}</td>
+        <td>${r.IC_ID}</td> 
+        <td>${r.IC_name}</td>
+        <td>${r.capacity}</td>          
+        </tr>`;
+        });
+        console.log(tab);
+        document.getElementById("chosenCourse").innerHTML = empty;
+        document.getElementById("chosenCourse").innerHTML = tab;
+      })
+
     .catch(e=>console.log(e))
-    })
 }
 
