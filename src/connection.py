@@ -24,6 +24,12 @@ class CURSOR():
 
     # Instantiate a DB cursor for every CURSOR instance
     def __init__(self) -> None:
+        self.DB = self.DB
+        self.DB_CURSOR = self.DB.cursor()
+
+    def restart(self) -> None:
+        self.DB_CURSOR.close()
+        self.DB = self.DB
         self.DB_CURSOR = self.DB.cursor()
 
     # Let function decide what to extract from res

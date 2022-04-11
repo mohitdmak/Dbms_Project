@@ -142,7 +142,7 @@ class FakeData():
                 min = 0, max = DB_WIDE_FAKE.COURSES - DB_WIDE_FAKE.CURR_COURSES - 1) 
                 for j in range(total))
             for k in range(total):
-                print(f"FAKE ADDITION: StudentId {i + 1} CurrCourseId {course_id_list[course_index_list[k]]} SubCourseId {sub_courses[sub_index_list[k]]}")
+                print(f"FAKE SUBSTITUTION: StudentId {i + 1} CurrCourseId {course_id_list[course_index_list[k]]} SubCourseId {sub_courses[sub_index_list[k]]}")
                 InsertHandler.subn_course(
                     i + 1, course_id_list[course_index_list[k]], sub_courses[sub_index_list[k]])
             self.fake.unique.clear()

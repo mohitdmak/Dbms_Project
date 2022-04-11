@@ -24,8 +24,8 @@ def register():
         return "Please provide a Name(limit 40 chars) and a Unique Username(limit 20 chars) for your account."
     else:
         content = request.get_json()
-        username = content['Username']
-        name = content['Name']
+        username = content['Username'] # type: ignore
+        name = content['Name']         # type: ignore
         #name = request.form["Name"]
         #username = request.form["Username"]
         try:
@@ -43,11 +43,9 @@ def login():
     if request.method == "GET":
         return "Please provide your Username(limit 20 chars) and Password(Your ID) for login."
     else:
-        print(request)
         content = request.get_json()
-        username = content['Username']
-        id = content['Password']
-        print(id);
+        username = content['Username'] # type: ignore
+        id = content['Password']       # type: ignore
         try:
             ERP_DB.execute_command(f'SELECT id FROM student WHERE username = "{username}" AND id = {id}')
             res = ERP_DB.return_results()
