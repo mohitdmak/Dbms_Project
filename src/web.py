@@ -74,7 +74,8 @@ def withdraw(id):
     if request.method == "GET":
         return "Please provide course id to withdraw from."
     else:
-        course_id = request.form["Course"]
+        content = request.get_json()
+        course_id = content["Course"]
         try:
             ERP_DB.execute_command(f'SELECT * FROM takes WHERE student_id = {id} AND course_id = {course_id}')
             result = ERP_DB.return_results()
@@ -112,6 +113,8 @@ def mysubstitutions(id):
         subn_course_name = subn_course_name[0][0] # type: ignore
         res.append({"current_course": {"id": course[0], "name": curr_course_name}, "sub_course": {"id": course[1], "name": subn_course_name}})
     return jsonify(res)
+
+
  
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
