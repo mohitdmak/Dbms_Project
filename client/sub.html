@@ -11,6 +11,7 @@
     const ID = parseInt(localStorage.getItem("ID"));
     const api_url = 
       `http://localhost:5000/mysubstitutions/${ID}`;
+    var count = 0;
   
 // Defining async function
 async function getapi(url) {
@@ -31,6 +32,7 @@ getapi(api_url);
 function show(data) {
     let tabCurr = ``;
     let tabSub = ``;
+    let tabStat = ``;
     data.forEach((r) => {
         tabCurr+= `<tr>
         <td class="text-center">${r.current_course.id}</td>
@@ -41,12 +43,19 @@ function show(data) {
         <td class="text-center">${r.sub_course.id}</td>
         <td class="text-center">${r.sub_course.name}</td>
         </tr>`;
+        tabStat = `<tr>
+        <td class="text-center">${r.status}</td>
+        </tr>`;
+        count ++;
     });
     // Setting innerHTML as tab variable
+    if(count != 0){
     console.log(tabCurr)
     console.log(tabSub)
     document.getElementById("CurrBody").innerHTML = tabCurr;
     document.getElementById("SubBody").innerHTML = tabSub;
+    document.getElementById("statBody").innerHTML = tabStat;
+    }
 }
     </script>
 <style>
@@ -87,7 +96,10 @@ function show(data) {
                                                 </tr>
                                             </thead>
                                             <tbody id="CurrBody">
-
+                                                <tr>
+                                                    <td class = "text-center">NONE</td>
+                                                    <td class = "text-center">NONE</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </td>
@@ -107,11 +119,27 @@ function show(data) {
                                             </tr>
                                         </thead>
                                         <tbody id="SubBody">
-
+                                            <td class = "text-center">NONE</td>
+                                            <td class = "text-center">NONE</td>
                                         </tbody>
                                     </table>
                                 </td>
                             </tr>
+
+                        </table>
+                    </td>
+                    <td>
+                        <table class = "table table-responsive w-100">
+                            <thead>
+                                <tr>
+                                    <td>STATUS</td>
+                                </tr>
+                            </thead>
+                            <tbody id="statBody">
+                                <tr>
+                                    <td>NONE</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </td>
                 </tr>
@@ -123,7 +151,7 @@ function show(data) {
 
                 <tr><td colspan="2" class="text-center">
                     Enter Course ID you want to Substitute :<br> <br>From:<input type="number" id="inputFrom"></input>
-                        <br><br>To:<input type="number" id="inputTo"><br><br><button id="addButton" class="btn btn-outline-info btn-sm">Substitute</button>
+                        <br><br>To:<input type="number" id="inputTo"><br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="">Substitute</button>
                 </td></tr>
             </tbody>
         </table></div>
