@@ -65,14 +65,14 @@ def mycourses(id):
     return jsonify(res)
 
 # Student withdrawal path
-@app.route("/withdraw/<id>", methods = ["GET"])
+@app.route("/mywithdrawals/<id>", methods = ["GET"])
 @cross_origin(supports_credentials = True)
 def withdraw(id):
     res = []
     ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id}')
     db_res = ERP_DB.return_results()
     for course in db_res:
-        res.append({"id": course[0], "name": course[1]})
+        res.append({"id": course[0], "name": course[1], "status": course[3]})
     return jsonify(res)
 
 # Student's addition requests
@@ -83,7 +83,7 @@ def myadditions(id):
     ERP_DB.execute_command(f'SELECT * FROM myAdditions WHERE student_id = {id}')
     db_res = ERP_DB.return_results()
     for course in db_res:
-        res.append({"id": course[0], "name": course[1]})
+        res.append({"id": course[0], "name": course[1], "status": course[3]})
     return jsonify(res)
 
 # Student's substitution requests
@@ -94,11 +94,9 @@ def mysubstitutions(id):
     ERP_DB.execute_command(f'SELECT * FROM mySubstitutions WHERE student_id = {id}')
     db_res = ERP_DB.return_results()
     for course in db_res:
-        res.append({"current_course": {"id": course[0], "name": course[1]}, "sub_course": {"id": course[2], "name": course[3]}})
+        res.append({"current_course": {"id": course[0], "name": course[1]}, "sub_course": {"id": course[2], "name": course[3]}, "status": course[5]})
     return jsonify(res)
 
-
- 
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Teacher Registration
