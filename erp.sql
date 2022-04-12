@@ -196,8 +196,12 @@ CREATE PROCEDURE `addAdditions` (IN student_id INT, IN course_id INT)
     IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
         IF NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
             IF NOT EXISTS(SELECT * FROM add_course WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
-                INSERT INTO add_course(student_id, course_id) VALUES (student_id, course_id); 
-                COMMIT;
+                IF (SELECT COUNT(*) FROM add_course a WHERE a.student_id = student_id) < 2 THEN
+                    INSERT INTO add_course(student_id, course_id) VALUES (student_id, course_id); 
+                    COMMIT;
+                ELSE
+                    ROLLBACK;
+                END IF;
             ELSE
                 ROLLBACK;
             END IF;
@@ -222,8 +226,12 @@ CREATE PROCEDURE `addSubstitutions` (IN student_id INT, IN curr_course_id INT, I
         IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id) 
             AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id)THEN
             IF NOT EXISTS(SELECT * FROM sub_course s WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id) THEN
-                INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES (student_id, curr_course_id, subn_course_id);
-                COMMIT;
+                IF (SELECT COUNT(*) FROM sub_course s WHERE s.student_id = student_id) < 2 THEN
+                    INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES (student_id, curr_course_id, subn_course_id);
+                    COMMIT;
+                ELSE
+                    ROLLBACK;
+                END IF;
             ELSE
                 ROLLBACK;
             END IF;
@@ -246,8 +254,12 @@ BEGIN
     IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
         IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = course_id) THEN
             IF NOT EXISTS(SELECT * FROM withdraw_course w WHERE w.student_id = student_id AND w.course_id = course_id) THEN
-                INSERT INTO withdraw_course(student_id, course_id) VALUES (student_id, course_id);
-                COMMIT;
+                IF (SELECT COUNT(*) FROM withdraw_course w WHERE w.student_id = student_id) < 2 THEN
+                    INSERT INTO withdraw_course(student_id, course_id) VALUES (student_id, course_id);
+                    COMMIT;
+                ELSE
+                    ROLLBACK;
+                END IF;
             ELSE 
                 ROLLBACK;
             END IF;
