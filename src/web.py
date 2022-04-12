@@ -90,10 +90,12 @@ def withdraw(id):
             content = request.get_json()
             course_id = content['course_id'] # type: ignore
             print(course_id)
+            print(id)
             InsertHandler.withdraw_course(id, course_id)
             ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id} AND course_id = {course_id};')
             db_res = ERP_DB.return_results()
-            res = 1 if len(res) == 1 else (-1) # type: ignore
+            print(db_res)
+            res = 1 if len(db_res) == 1 else (-1) # type: ignore
             return jsonify({"message": str(res)})
         except:
             return jsonify({"message": "-1"})
