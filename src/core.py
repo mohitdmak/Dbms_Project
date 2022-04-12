@@ -196,10 +196,10 @@ class InsertIn():
         if len(ERP_DB.return_results()) != 0:
             raise ProgERROR(f"Subn Course id {subn_course_id} is already among student {student_id}'s registered courses!")
         # Final Execution
-        ERP_DB.execute_command(
-            f'INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES ("{student_id}", "{curr_course_id}", "{subn_course_id}");'
-        )
-        # ERP_DB.DB_CURSOR.callproc("addSubstitutions", [student_id, curr_course_id, subn_course_id])
+        # ERP_DB.execute_command(
+        #     f'INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES ("{student_id}", "{curr_course_id}", "{subn_course_id}");'
+        # )
+        ERP_DB.DB_CURSOR.callproc("addSubstitutions", [student_id, curr_course_id, subn_course_id])
 
 
 # Instantiate handlers
