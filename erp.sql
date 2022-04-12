@@ -149,11 +149,8 @@ CREATE PROCEDURE `addTakes` (IN student_id INT, IN course_id INT)
     BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
-        SELECT "HII";
         IF (SELECT seats_left FROM course WHERE id = course_id) > 0 THEN
-            SELECT "HI";
             IF NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
-                SELECT "H";
                 INSERT INTO takes(`student_id`, `course_id`) VALUES (student_id, course_id);
                 UPDATE course SET seats_left = seats_left - 1 WHERE id = course_id;
                 COMMIT;
