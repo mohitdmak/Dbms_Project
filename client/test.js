@@ -26,18 +26,27 @@ document.getElementById("Password").value = "";
             localStorage.setItem("Name", username);
             localStorage.setItem("ID", res.data.id);
             console.log(localStorage);
-            location.href = 'http://127.0.0.1:5500/client/course.html'
+            var loc = window.location.pathname;
+            var dir = loc.substring(0, loc.lastIndexOf('/'));
+            dir += "/course.html";
+            location.href = dir;
           }
           else{
               alert("WARNING!: Wrong Username or Password Entered");
-              location.href = 'http://127.0.0.1:5500/client/test.html'
+              var loc = window.location.pathname;
+              var dir = loc.substring(0, loc.lastIndexOf('/'));
+              dir += "/login.html";
+              location.href = dir;
           }
         })
         .catch(e => console.log(e));
 }
 
 function goToRegister(){
-    location.href = "http://127.0.0.1:5500/client/register.html";
+  var loc = window.location.pathname;
+  var dir = loc.substring(0, loc.lastIndexOf('/'));
+  dir += "/register.html";
+  location.href = dir;
 }
 
 function goRegister(){
@@ -62,6 +71,10 @@ function goRegister(){
         console.log(res.data);
         if(parseInt(res.data.id)>0){
             alert("Registered!!");
+            var loc = window.location.pathname;
+            var dir = loc.substring(0, loc.lastIndexOf('/'));
+            dir += "/login.html";
+            location.href = dir;
         }
         else
             alert("User already Exist");

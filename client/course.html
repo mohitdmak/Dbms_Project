@@ -91,21 +91,30 @@ function show(data) {
 
                     <script type="text/javascript">
                         document.getElementById("AddButton").onclick = function () {
-                            location.href = 'http://127.0.0.1:5500/client/add.html';
+                            var loc = window.location.pathname;
+                            var dir = loc.substring(0, loc.lastIndexOf('/'));
+                            dir += "/add.html";
+                            location.href = dir;
                         };
                     </script></td></tr>
                 <tr><td class = "text-center"><button id="WithButton" class="btn btn-outline-info btn-sm" >Withdraw Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("WithButton").onclick = function () {
-                            location.href = 'http://127.0.0.1:5500/client/with.html';
+                            var loc = window.location.pathname;
+                            var dir = loc.substring(0, loc.lastIndexOf('/'));
+                            dir += "/with.html";
+                            location.href = dir;
                         };
                     </script></td></tr>
                 <tr><td class = "text-center"><button id="SubButton" class="btn btn-outline-info btn-sm" >Substitute Courses</button>
 
                     <script type="text/javascript">
                         document.getElementById("SubButton").onclick = function () {
-                            location.href = 'http://127.0.0.1:5500/client/sub.html';
+                            var loc = window.location.pathname;
+                            var dir = loc.substring(0, loc.lastIndexOf('/'));
+                            dir += "/sub.html";
+                            location.href = dir;
                         };
                     </script></td></tr>
             </table>
