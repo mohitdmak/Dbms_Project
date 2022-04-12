@@ -92,7 +92,7 @@ function addCourseConfirm(){
           "Content-Type": "application/json"
         }
       }
-    let data = {CourseID: courseId}
+    let data = {course_id: courseId}
 
     let URL = `http://localhost:5000/myadditions/${ID}`;
 
@@ -115,22 +115,24 @@ function addCourseConfirm(){
 
 function subCourseConfirm(){
     const ID = parseInt(localStorage.getItem("ID"))
-    const courseId = document.getElementById("input").value;
+    const curr_course_id = document.getElementById("input").value;
+    const subn_course_id = document.getElementById("inputTo").value;
     document.getElementById("input").value="";
+    document.getElementById("inputTo").value="";
     let config = {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json"
         }
       }
-    let data = {CourseID: courseId}
+    let data = {curr_course_id: curr_course_id, subn_course_id: subn_course_id}
 
     let URL = `http://localhost:5000/mysubstitutions/${ID}`;
 
     axios.post(URL, data, config)
     .then(res=>{
       data = res.data;
-      if(data.id>0){
+      if(data.message>0){
         alert("Substitution Request Confirmed");
       }
       else{
@@ -154,7 +156,7 @@ function withCourseConfirm(){
           "Content-Type": "application/json"
         }
       }
-    let data = {CourseID: courseId}
+    let data = {course_id: courseId}
 
     let URL = `http://localhost:5000/mywithdrawals/${ID}`;
 
@@ -176,39 +178,8 @@ function withCourseConfirm(){
     .catch(e=>console.log(e))
 }
 
-function displayCourse(){ 
-  /*const api_url = 
-  `http://localhost:5000/course_detail`;
-
-  async function getapi(url) {
-
-// Storing response
-  const response = await fetch(url);
-
-var data = await response.json();
-show(data);
-}
-getapi(api_url);
-
-function show(data) {
-let tab = ``;
-data.forEach((r) => {
-    tab += `<tr> 
-    <td>${r.id} </td>
-    <td>${r.name}</td>
-    <td>${r.IC_id}</td> 
-    <td>${r.capacity}</td>
-    <td>${r.seats_left}</td>
-    <td>${r.ic_name}</td>
-    </tr>`;
-});
-
-console.log(tab)
-document.getElementById("table").innerHTML = tab;
-}
-}*/
+function displayCourse(){
     const courseId = document.getElementById("input").value;
-    document.getElementById("input").value="";
     let config = {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -221,35 +192,62 @@ document.getElementById("table").innerHTML = tab;
 
     axios.post(URL, data, config)
     .then(res=>{
-        console.log(res.data);
-
-        let empty = ``;
+      console.log(res);
+        var data = res.data;
         let body = ``;
-        let head = `<tr>
+
+          body += `<tr>
+          <td class = "text-center">Course ID</td>
+          <td class = "text-center">Course Name</td>
+          <td class = "text-center">IC ID</td>
+          <td class = "text-center">IC name</td>
+          <td class = "text-center">capacity</td>
+          <td class = "text-center">Seats Left</td>
+          </tr><tr> 
+          <td>${data.id} </td>
+          <td>${data.name}</td>
+          <td>${data.IC_id}</td> 
+          <td>${data.ic_name}</td>
+          <td>${data.capacity}</td>
+          <td>${data.seats_left}</td>
+          </tr>`;
+        document.getElementById("chosenCourse").innerHTML = body;
+      })
+}
+
+function displayCourseTo(){
+  const courseId = document.getElementById("inputTo").value;
+  let config = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      }
+    }
+  let data = {course_id: courseId}
+
+  let URL = 'http://localhost:5000/course_detail';
+
+  axios.post(URL, data, config)
+  .then(res=>{
+    console.log(res);
+      var data = res.data;
+      let body = ``;
+
+        body += `<tr>
         <td class = "text-center">Course ID</td>
         <td class = "text-center">Course Name</td>
         <td class = "text-center">IC ID</td>
         <td class = "text-center">IC name</td>
         <td class = "text-center">capacity</td>
         <td class = "text-center">Seats Left</td>
-        </tr>`
-
-        res.forEach(r=>{
-          body += `<tr> 
-          <td>${r.id} </td>
-          <td>${r.name}</td>
-          <td>${r.IC_id}</td> 
-          <td>${r.ic_name}</td>
-          <td>${r.capacity}</td>
-          <td>${r.seats_left}</td>
-          </tr>`;
-        });
-        console.log(tab);
-        document.getElementById("chosenBody").innerHTML = empty;
-        document.getElementById("chosenHead").innerHTML = empty;
-        document.getElementById("chosenBody").innerHTML = head;
-        document.getElementById("chosenHead").innerHTML = body;
-      })
-
-    .catch(e=>console.log(e))
+        </tr><tr> 
+        <td>${data.id} </td>
+        <td>${data.name}</td>
+        <td>${data.IC_id}</td> 
+        <td>${data.ic_name}</td>
+        <td>${data.capacity}</td>
+        <td>${data.seats_left}</td>
+        </tr>`;
+      document.getElementById("chosenCourse").innerHTML = body;
+    })
 }

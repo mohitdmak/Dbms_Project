@@ -145,15 +145,18 @@ function show(data) {
                         </table>
                     </td>
                 </tr>
-                <tr><td class="text-center">
-                    <table id="chosenCourse" class="table table-dark table-borderless table-responsive w-100">
-
+                <tr colspan="5"><td class="text-center">
+                    <table id="chosenCourse" class="table table-dark table-borderless w-100">
+    
                     </table>
                 </td></tr>
 
                 <tr><td colspan="2" class="text-center">
-                    Enter Course ID you want to Substitute :<br> <br>From:<input type="number" id="inputFrom"></input>
-                        <br><br>To:<input type="number" id="inputTo"><br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="">Substitute</button>
+                    Enter Course ID you want to Substitute :<br> <br>From:<input type="number" id="input"></input>
+                    <br><br>To:<input type="number" id="inputTo"></input><br><br>
+                    <br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="displayCourse()">ShowFrom</button>
+                    <br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="displayCourseTo()">ShowTo</button>
+                        <button id="addButton" class="btn btn-outline-info btn-sm" onclick="subCourseConfirm()">Substitute</button>
                 </td></tr>
             </tbody>
         </table></div>
