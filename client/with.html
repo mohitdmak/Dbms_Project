@@ -10,6 +10,7 @@
         const ID = parseInt(localStorage.getItem("ID"));
         const api_url = 
             `http://localhost:5000/withdraw/${ID}`;
+        var count = 0;
   
 // Defining async function
 async function getapi(url) {
@@ -30,13 +31,17 @@ function show(data) {
     data.forEach((r) => {
         tab += `<tr> 
         <td class="text-center">${r.id} </td>
-        <td class="text-center">${r.name}</td>       
+        <td class="text-center">${r.name}</td>
+        <td class="text-center">${r.status}</td>       
         </tr>`;
+        count++;
     });
     // Setting innerHTML as tab variable
+    if(count != 0){
     console.log(tab)
     document.getElementById("addCourse").innerHTML = ``;
     document.getElementById("addCourse").innerHTML = tab;
+    }
 }
     </script>
 <style>
@@ -67,10 +72,7 @@ function show(data) {
                     </tr>
                 </thead>
                 <tbody id="addCourse">
-                    <tr>
-                        <td class="text-center">NONE</td>
-                        <td class="text-center">NONE</td>
-                    </tr>
+
                 </tbody>
                 </table>
             </td></tr>

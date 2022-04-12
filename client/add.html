@@ -10,6 +10,7 @@
     const ID = parseInt(localStorage.getItem("ID"));
     const api_url = 
       `http://localhost:5000/myadditions/${ID}`;
+    let count = 0;
   
 // Defining async function
 async function getapi(url) {
@@ -28,14 +29,18 @@ getapi(api_url);
 function show(data) {
     let tab = ``;
     data.forEach((r) => {
+        console.log(r);
         tab += `<tr> 
         <td class = "text-center">${r.id} </td>
-        <td class = "text-center">${r.name}</td>       
+        <td class = "text-center">${r.name}</td>
+        <td class = "text-center">${r.status}</td>       
         </tr>`;
+        count++;
     });
-    // Setting innerHTML as tab variable
+    if(count != 0){
     console.log(tab)
     document.getElementById("addCourse").innerHTML = tab;
+    }
 }
     </script>
 <style>
@@ -63,11 +68,16 @@ function show(data) {
                     <tr>
                         <td class = "text-center"><h4>Addition Course ID</h4></td>
                         <td class = "text-center"><h4>Addition Course Name</h4></td>
+                        <td class = "text-center"><h4>Addition Course Status</h4></td>
                     </tr>
                 </thead>
 
                 <tbody id="addCourse">
-
+                    <tr> 
+                    <td class = "text-center">NONE</td>
+                    <td class = "text-center">NONE</td>
+                    <td class = "text-center">NONE</td>       
+                    </tr>
                 </tbody>
                 </table>
             </td></tr>
@@ -77,12 +87,12 @@ function show(data) {
 
                     </thead>
                     <tbody id="chosenBody">
-
+                        
                     </tbody>
                 </table>
             </td></tr>
             <tr><td class = "text-center">
-                Enter Course ID you want to add : <input type="number" id="input"><br><button id="AddButton" class="btn btn-outline-info btn-sm" onclick="addCourse()">Add
+                Enter Course ID you want to add : <input type="number" id="input"><br><button id="AddButton" class="btn btn-outline-info btn-sm" onclick="addCourseConfirm()">Add
                     </button></input>
             </td></tr>
         </table></div>
