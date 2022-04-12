@@ -147,20 +147,29 @@ function displayCourse(){
         console.log(res.data);
 
         let empty = ``;
-        let tab = ``;
+        let body = ``;
+        let head = `<tr>
+        <td class = "text-center">Course ID</td>
+        <td class = "text-center">Course Name</td>
+        <td class = "text-center">IC ID</td>
+        <td class = "text-center">Seats Left</td>
+        <td class = "text-center">Capacity</td>
+        </tr>`
 
         res.forEach(r=>{
-          tab += `<tr> 
+          body += `<tr> 
         <td>${r.id} </td>
         <td>${r.name}</td>
         <td>${r.IC_ID}</td> 
-        <td>${r.IC_name}</td>
+        <td>${r.seats_left}</td>
         <td>${r.capacity}</td>          
         </tr>`;
         });
         console.log(tab);
-        document.getElementById("chosenCourse").innerHTML = empty;
-        document.getElementById("chosenCourse").innerHTML = tab;
+        document.getElementById("chosenBody").innerHTML = empty;
+        document.getElementById("chosenHead").innerHTML = empty;
+        document.getElementById("chosenBody").innerHTML = head;
+        document.getElementById("chosenHead").innerHTML = body;
       })
 
     .catch(e=>console.log(e))
