@@ -59,43 +59,70 @@ def mycourses(id):
     ERP_DB.execute_command(f'SELECT * FROM myCourses WHERE student_id = {id};')
     db_res = ERP_DB.return_results()
     for course in db_res:
-        # ERP_DB.execute_command(f'SELECT name FROM teacher WHERE id = {course[2]}')
-        # ic_name = ERP_DB.return_results()[0][0] # type: ignore
         res.append({"id": course[0], "name": course[1], "IC_ID": course[2], "IC_name": course[3], "capacity": course[4]})
     return jsonify(res)
 
+# Details of a singular course
+@app.route("/course_detail/", methods = ["GET"])
+@cross_origin(supports_credentials = True)
+def courseDetails():
+    id = request.get_json()['course_id'] # type: ignore
+    ERP_DB.execute_command(f'SELECT * FROM course WHERE id = {id};')
+    db_res = ERP_DB.return_results()
+    ERP_DB.execute_command(f'SELECT name FROM teacher WHERE id = {db_res[0][4]}') # type: ignore
+    ic_name = ERP_DB.return_results()[0][0] # type: ignore
+    return jsonify({
+        "id": db_res[0][0], "name": db_res[0][1], "IC_id": db_res[0][4], "capacity": int(db_res[0][2]), "seats_left": int(db_res[0][3]), "IC_name": ic_name}) # type: ignore
+
 # Student withdrawal path
-@app.route("/mywithdrawals/<id>", methods = ["GET"])
+@app.route("/mywithdrawals/<id>", methods = ["GET", "POST"])
 @cross_origin(supports_credentials = True)
 def withdraw(id):
-    res = []
-    ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id}')
-    db_res = ERP_DB.return_results()
-    for course in db_res:
-        res.append({"id": course[0], "name": course[1], "status": course[3]})
-    return jsonify(res)
+    if request.method == "GET":
+        res = []
+        ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id}')
+        db_res = ERP_DB.return_results()
+        for course in db_res:
+            res.append({"id": course[0], "name": course[1], "status": course[3]})
+        return jsonify(res)
+    else:
+        try:
+            content = request.get_json()
+            course_id = content['course_id'] # type: ignore
+            print(course_id)
+            InsertHandler.withdraw_course(id, course_id)
+            ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id} AND course_id = {course_id};')
+            db_res = ERP_DB.return_results()
+            res = 1 if len(res) == 1 else (-1) # type: ignore
+            return jsonify({"message": str(res)})
+        except:
+            return jsonify({"message": "-1"})
 
 # Student's addition requests
-@app.route("/myadditions/<id>", methods = ["GET"])
+@app.route("/myadditions/<id>", methods = ["GET", "POST"])
 @cross_origin(supports_credentials = True)
 def myadditions(id):
-    res = []
-    ERP_DB.execute_command(f'SELECT * FROM myAdditions WHERE student_id = {id}')
-    db_res = ERP_DB.return_results()
-    for course in db_res:
-        res.append({"id": course[0], "name": course[1], "status": course[3]})
-    return jsonify(res)
+    if request.method == "GET":
+        res = []
+        ERP_DB.execute_command(f'SELECT * FROM myAdditions WHERE student_id = {id}')
+        db_res = ERP_DB.return_results()
+        for course in db_res:
+            res.append({"id": course[0], "name": course[1], "status": course[3]})
+        return jsonify(res)
+    # else:
 
 # Student's substitution requests
-@app.route("/mysubstitutions/<id>", methods = ["GET"])
+@app.route("/mysubstitutions/<id>", methods = ["GET", "POST"])
 @cross_origin(supports_credentials = True)
 def mysubstitutions(id):
-    res = []
-    ERP_DB.execute_command(f'SELECT * FROM mySubstitutions WHERE student_id = {id}')
-    db_res = ERP_DB.return_results()
-    for course in db_res:
-        res.append({"current_course": {"id": course[0], "name": course[1]}, "sub_course": {"id": course[2], "name": course[3]}, "status": course[5]})
-    return jsonify(res)
+    if request.method == "GET":
+        res = []
+        ERP_DB.execute_command(f'SELECT * FROM mySubstitutions WHERE student_id = {id}')
+        db_res = ERP_DB.return_results()
+        for course in db_res:
+            res.append({"current_course": {"id": course[0], "name": course[1]}, "sub_course": {"id": course[2], "name": course[3]}, "status": course[5]})
+        return jsonify(res)
+    # else:
 
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
