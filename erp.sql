@@ -212,14 +212,14 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS `addSubstitutions`;
 DELIMITER $$
-CREATE PROCEDURE `addSubstitutions` (IN student_id INT, IN curn_course_id INT, IN subn_course_id INT)
+CREATE PROCEDURE `addSubstitutions` (IN student_id INT, IN curr_course_id INT, IN subn_course_id INT)
     MODIFIES SQL DATA
     COMMENT 'Adds a new substitution request for a student'
 BEGIN
     START TRANSACTION;
-    IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = curn_course_id) AND EXISTS(SELECT * FROM course WHERE id = subn_course_id) THEN
-        IF EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = curn_course_id) AND NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = subn_course_id)THEN
-            IF NOT EXISTS(SELECT * FROM sub_course WHERE 'student_id' = student_id AND 'curn_course_id' = curn_course_id AND 'subn_course_id' = subn_course_id) THEN
+    IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = curr_course_id) AND EXISTS(SELECT * FROM course WHERE id = subn_course_id) THEN
+        IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id) AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id)THEN
+            IF NOT EXISTS(SELECT * FROM sub_course s WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id) THEN
                 INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES (student_id, curr_course_id, subn_course_id);
                 COMMIT;
             ELSE
@@ -242,8 +242,8 @@ CREATE PROCEDURE `addWithdraw` (IN student_id INT, IN course_id INT)
 BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
-        IF EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
-            IF NOT EXISTS(SELECT * FROM withdraw_course WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+        IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = course_id) THEN
+            IF NOT EXISTS(SELECT * FROM withdraw_course w WHERE w.student_id = student_id AND w.course_id = course_id) THEN
                 INSERT INTO withdraw_course(student_id, course_id) VALUES (student_id, course_id);
                 COMMIT;
             ELSE 

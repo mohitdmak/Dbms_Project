@@ -161,7 +161,7 @@ class InsertIn():
         ERP_DB.execute_command( f'SELECT * FROM course where id = {course_id};')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"No Withdraw_Course. Course of id {course_id} exists!")
-        ERP_DB.execute_command(f'SELECT * FROM withdraw_course WHERE student_id = {student_id} AND course_id = {course_id}')
+        ERP_DB.execute_command(f'SELECT * FROM takes WHERE student_id = {student_id} AND course_id = {course_id}')
         if len(ERP_DB.return_results()) == 0:
             raise ProgERROR(f"Student {student_id} does not already take the course {course_id} to withdraw")
         ERP_DB.execute_command( f'SELECT * FROM withdraw_course where student_id = {student_id} and course_id = {course_id};')

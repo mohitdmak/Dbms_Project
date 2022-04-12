@@ -19,3 +19,4 @@ class DB_WIDE_FAKE:
     ASSISTS_LIM  = 2
     ADDN_LIM     = 2
     SUBN_LIM     = 2
+    WITH_LIM     = 2

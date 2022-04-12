@@ -29,6 +29,7 @@ class FakeData():
         self.fake_takes()
         self.fake_addn_courses()
         self.fake_subn_courses()
+        self.fake_with_courses()
         print("\n Successfully completed faking of data, erp DB is complete with Dummy data !")
 
     # Teachers
@@ -123,6 +124,32 @@ class FakeData():
                 InsertHandler.addn_course(id, add_courses[course_id])
         print(f"\n   Generated {DB_WIDE_FAKE.ADDN_LIM} Additions as Max Lim < < < < < < < < < < < < < < < < < < < < < < < <\n")
 
+    # Withdraw Courses
+    def fake_with_courses(self):
+        print("\n   Generating Fake Withdrawals > > > > > > > > > > > > > > > > > > > > > > > >\n")
+        for i in range(DB_WIDE_FAKE.STUDENTS):
+            total = self.fake.random_int(min = 0, max = DB_WIDE_FAKE.WITH_LIM) 
+            ERP_DB.execute_command(
+                f"SELECT course_id FROM takes WHERE student_id = {i + 1}")
+            course_id_list = ERP_DB.return_results()
+            course_id_list = [course_id[0] for course_id in course_id_list]
+            #add_courses = [x for x in range(
+             #   DB_ATTRS.FIRST_ID, DB_WIDE_FAKE.COURSES + 1) 
+            #    if x not in course_id_list]
+            #add_index_list = list(self.fake.unique.random_int(
+            #    min = 0, max = DB_WIDE_FAKE.COURSES - DB_WIDE_FAKE.CURR_COURSES - 1)
+            #    for j in range(total))
+            course_index_list = list(self.fake.unique.random_int(
+                min = 0, max = DB_WIDE_FAKE.CURR_COURSES - 1)
+                for j in range(total))
+            self.fake.unique.clear()
+            for k in range(total):
+                print(f"FAKE WITHDRAWL: StudentId {i + 1} CurrCourseId {course_id_list[course_index_list[k]]}")
+                InsertHandler.withdraw_course(
+                    i + 1, course_id_list[course_index_list[k]])
+            self.fake.unique.clear()
+        print(f"\n   Generated {DB_WIDE_FAKE.WITH_LIM} Wthdrawals as Max Lim < < < < < < < < < < < < < < < < < < < < < < < <\n")     
+    
     # Substitution Courses
     def fake_subn_courses(self):
         print("\n   Generating Fake Substitution > > > > > > > > > > > > > > > > > > > > > > > >\n")
