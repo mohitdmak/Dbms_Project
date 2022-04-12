@@ -39,11 +39,13 @@ function show(data) {
         tabCurr+= `<tr>
         <td class="text-center">${r.current_course.id}</td>
         <td class="text-center">${r.current_course.name}</td>
+        <td class="text-center">${r.current_course.seats_left}</td>
         </tr>`;
 
         tabSub += `<tr>
         <td class="text-center">${r.sub_course.id}</td>
         <td class="text-center">${r.sub_course.name}</td>
+        <td class="text-center">${r.sub_course.seats_left}</td>
         </tr>`;
         tabStat += `<tr>
         <td class="text-center">${r.status}</td>
@@ -77,28 +79,30 @@ function show(data) {
 </style>
     
     <body><div class="table table-responsive w-100">
-        <table id="substitution" class="table table-borderless table-responsive w-100" border="2">
+        <table id="substitution" class="table table-borderless table-dark table-responsive w-100" border="2">
             <thead>
                 <tr>
-                    <td colspan=2 class = "text-center"><h1>Your Substitution Courses</h1></td>
+                    <td colspan=3 class = "text-center"><h1>Your Substitution Courses</h1></td>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class = "text-center">
-                        <table class="table table-responsive w-100" border="1">
+                        <table class="table table-responsive table-dark table-striped w-100" border="1">
                             <tr><td class = "text-center"><h3>Your Current Courses</h3></td></tr>
                                 <tr>
                                     <td class = "text-center">
-                                        <table class="table table-borderless table-responsive w-100">
+                                        <table class="table table-borderless table-dark table-striped table-responsive w-100">
                                             <thead>
                                                 <tr>
                                                     <td class = "text-center"><h5>ID</h5></td>
                                                     <td class = "text-center"><h5>Name</h5></td>
+                                                    <td class = "text-center"><h5>Seats Left</h5></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="CurrBody">
                                                 <tr>
+                                                    <td class = "text-center">NONE</td>
                                                     <td class = "text-center">NONE</td>
                                                     <td class = "text-center">NONE</td>
                                                 </tr>
@@ -109,18 +113,20 @@ function show(data) {
                         </table>
                     </td>
                     <td class = "text-center">
-                        <table class="table table-responsive w-100" border="1">
+                        <table class="table table-borderless table-dark table-striped table-responsive w-100" border="1">
                             <tr><td class = "text-center"><h3>Your Substituted Courses</h3></td></tr>
                             <tr>
                                 <td class = "text-center">
-                                    <table class="table table-borderless table-responsive w-100">
+                                    <table class="table table-borderless table-dark table-striped table-responsive w-100">
                                         <thead>
                                             <tr>
                                                 <td class = "text-center"><h5>ID</h5></td>
                                                 <td class = "text-center"><h5>Name</h5></td>
+                                                <td class = "text-center"><h5>Seats Left</h5></td>
                                             </tr>
                                         </thead>
                                         <tbody id="SubBody">
+                                            <td class = "text-center">NONE</td>
                                             <td class = "text-center">NONE</td>
                                             <td class = "text-center">NONE</td>
                                         </tbody>
@@ -131,7 +137,7 @@ function show(data) {
                         </table>
                     </td>
                     <td>
-                        <table class = "table table-borderless table-responsive w-100" border="1">
+                        <table class = "table table-borderless table-dark table-striped table-responsive w-100" border="1">
                             <thead>
                                 <tr>
                                     <td><h5>STATUS</h5></td>
@@ -145,18 +151,22 @@ function show(data) {
                         </table>
                     </td>
                 </tr>
-                <tr colspan="5"><td class="text-center">
-                    <table id="chosenCourse" class="table table-dark table-borderless w-100">
+                <tr><td class="text-center">
+                    <table id="chosenCourse" class="table table-dark table-borderless w-100" border="2" border-color: "white">
+    
+                    </table>
+                </td><td class="text-center" colspan="2">
+                    <table id="chosenCourseTo" class="table table-dark w-100" border="2">
     
                     </table>
                 </td></tr>
 
-                <tr><td colspan="2" class="text-center">
+                <tr><td colspan="3" class="text-center">
                     Enter Course ID you want to Substitute :<br> <br>From:<input type="number" id="input"></input>
-                    <br><br>To:<input type="number" id="inputTo"></input><br><br>
+                    To:<input type="number" id="inputTo"></input>
                     <br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="displayCourse()">ShowFrom</button>
-                    <br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="displayCourseTo()">ShowTo</button>
-                        <button id="addButton" class="btn btn-outline-info btn-sm" onclick="subCourseConfirm()">Substitute</button>
+                            <button id="addButton" class="btn btn-outline-info btn-sm" onclick="displayCourseTo()">ShowTo</button>
+                    <br><br><button id="addButton" class="btn btn-outline-info btn-sm" onclick="subCourseConfirm()">Substitute</button>
                 </td></tr>
             </tbody>
         </table></div>

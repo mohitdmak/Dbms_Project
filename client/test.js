@@ -204,12 +204,12 @@ function displayCourse(){
           <td class = "text-center">capacity</td>
           <td class = "text-center">Seats Left</td>
           </tr><tr> 
-          <td>${data.id} </td>
-          <td>${data.name}</td>
-          <td>${data.IC_id}</td> 
-          <td>${data.ic_name}</td>
-          <td>${data.capacity}</td>
-          <td>${data.seats_left}</td>
+          <td class="text-center">${data.id} </td>
+          <td class="text-center">${data.name}</td>
+          <td class="text-center">${data.IC_id}</td> 
+          <td class="text-center">${data.IC_name}</td>
+          <td class="text-center">${data.capacity}</td>
+          <td class="text-center">${data.seats_left}</td>
           </tr>`;
         document.getElementById("chosenCourse").innerHTML = body;
       })
@@ -241,13 +241,13 @@ function displayCourseTo(){
         <td class = "text-center">capacity</td>
         <td class = "text-center">Seats Left</td>
         </tr><tr> 
-        <td>${data.id} </td>
-        <td>${data.name}</td>
-        <td>${data.IC_id}</td> 
-        <td>${data.ic_name}</td>
-        <td>${data.capacity}</td>
-        <td>${data.seats_left}</td>
+        <td class="text-center">${data.id} </td>
+        <td class="text-center">${data.name}</td>
+        <td class="text-center">${data.IC_id}</td> 
+        <td class="text-center">${data.IC_name}</td>
+        <td class="text-center">${data.capacity}</td>
+        <td class="text-center">${data.seats_left}</td>
         </tr>`;
-      document.getElementById("chosenCourse").innerHTML = body;
+      document.getElementById("chosenCourseTo").innerHTML = body;
     })
 }

@@ -34,6 +34,7 @@ function show(data) {
         tab += `<tr> 
         <td class="text-center">${r.id} </td>
         <td class="text-center">${r.name}</td>
+        <td class="text-center">${r.seats_left}</td>    
         <td class="text-center">${r.status}</td>       
         </tr>`;
         count++;
@@ -71,6 +72,8 @@ function show(data) {
                     <tr>
                         <td class="text-center">Withdrawn Course ID</td>
                         <td class="text-center">Withdrawn Course Name</td>
+                        <td class="text-center">Withdrawn Course Seats Left</td>
+                        <td class="text-center">Withdrawn Course Status</td>
                     </tr>
                 </thead>
                 <tbody id="withCourse">
