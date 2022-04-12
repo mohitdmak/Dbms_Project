@@ -83,6 +83,7 @@ function goRegister(){
 }
 
 function addCourseConfirm(){
+    const ID = parseInt(localStorage.getItem("ID"))
     const courseId = document.getElementById("input").value;
     document.getElementById("input").value="";
     let config = {
@@ -93,16 +94,27 @@ function addCourseConfirm(){
       }
     let data = {CourseID: courseId}
 
-    let URL = 'http://localhost:5000/addcourse';
+    let URL = `http://localhost:5000/myadditions/${ID}`;
 
     axios.post(URL, data, config)
     .then(res=>{
-        console.log(res.data)
-    .catch(e=>console.log(e))
+      data = res.data;
+      if(data.id>0){
+        alert("Addition Request Confirm");
+      }
+      else{
+        alert("Addition Request Rejected because of One of the following reasons:\n1) \n2) \n");
+      }
+      var loc = window.location.pathname;
+      var dir = loc.substring(0, loc.lastIndexOf('/'));
+      dir += "/add.html";
+      location.href = dir;
     })
+    .catch(e=>console.log(e))
 }
 
 function subCourseConfirm(){
+    const ID = parseInt(localStorage.getItem("ID"))
     const courseId = document.getElementById("input").value;
     document.getElementById("input").value="";
     let config = {
@@ -113,16 +125,27 @@ function subCourseConfirm(){
       }
     let data = {CourseID: courseId}
 
-    let URL = 'http://localhost:5000/subcourse';
+    let URL = `http://localhost:5000/mysubstitutions/${ID}`;
 
     axios.post(URL, data, config)
     .then(res=>{
-        console.log(res.data)
+      data = res.data;
+      if(data.id>0){
+        alert("Substitution Request Confirmed");
+      }
+      else{
+        alert("Substitution Request Rejected because of One of the following reasons:\n1) \n2) \n");
+      }
+
+      var loc = window.location.pathname;
+      var dir = loc.substring(0, loc.lastIndexOf('/'));
+      dir += "/sub.html";
+      location.href = dir;    })
     .catch(e=>console.log(e))
-    })
 }
 
 function withCourseConfirm(){
+    const ID = parseInt(localStorage.getItem("ID"));
     const courseId = document.getElementById("input").value;
     document.getElementById("input").value="";
     let config = {
@@ -133,13 +156,23 @@ function withCourseConfirm(){
       }
     let data = {CourseID: courseId}
 
-    let URL = 'http://localhost:5000/withcourse';
+    let URL = `http://localhost:5000/mywithdrawals/${ID}`;
 
     axios.post(URL, data, config)
     .then(res=>{
-        console.log(res.data)
+      data = res.data;
+      if(data.id>0){
+        alert("Withdrawal Request Confirmed");
+      }
+      else{
+        alert("Withdrawal Request Rejected because of One of the following reasons:\n1) \n2) \n");
+      }
+
+      var loc = window.location.pathname;
+      var dir = loc.substring(0, loc.lastIndexOf('/'));
+      dir += "/with.html";
+      location.href = dir;    })
     .catch(e=>console.log(e))
-    })
 }
 
 function displayCourse(){
@@ -151,9 +184,9 @@ function displayCourse(){
           "Content-Type": "application/json"
         }
       }
-    let data = {CourseID: courseId}
+    let data = {course_id: courseId}
 
-    let URL = 'http://localhost:5000/showcourses';
+    let URL = 'http://localhost:5000/course_detail';
 
     axios.post(URL, data, config)
     .then(res=>{

@@ -63,7 +63,7 @@ function show(data) {
         <table id="addition" class="table w-100">
             <tr><td class="text-center"><h1>Your Addition Courses</h1></td></tr>
             <tr><td class = "text-center">
-                <table class=".text-center cell table table-striped table-dark table-hover">
+                <table class="table table-dark table-borderless table-responsive w-100">
                 <thead class="thead-head">
                     <tr>
                         <td class = "text-center"><h4>Addition Course ID</h4></td>
@@ -92,8 +92,9 @@ function show(data) {
                 </table>
             </td></tr>
             <tr><td class = "text-center">
-                Enter Course ID you want to add : <input type="number" id="input"><br><button id="AddButton" class="btn btn-outline-info btn-sm" onclick="addCourseConfirm()">Add
-                    </button></input>
+                Enter Course ID you want to add : <input type="number" id="input"><br>
+                <button id="AddButton" class="btn btn-outline-info btn-sm" onclick="addCourseConfirm()">Add</button><br><br>
+                <button id="AddButton" class="btn btn-outline-info btn-sm" onclick="displayCourse()">Show</button>
             </td></tr>
         </table></div>
     </body>
