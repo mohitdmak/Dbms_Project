@@ -9,7 +9,7 @@
     <script>
         const ID = parseInt(localStorage.getItem("ID"));
         const api_url = 
-            `http://localhost:5000/withdraw/${ID}`;
+            `http://localhost:5000/mywithdrawals/${ID}`;
         var count = 0;
   
 // Defining async function
@@ -39,8 +39,8 @@ function show(data) {
     // Setting innerHTML as tab variable
     if(count != 0){
     console.log(tab)
-    document.getElementById("addCourse").innerHTML = ``;
-    document.getElementById("addCourse").innerHTML = tab;
+    document.getElementById("withCourse").innerHTML = ``;
+    document.getElementById("withCourse").innerHTML = tab;
     }
 }
     </script>
@@ -71,7 +71,7 @@ function show(data) {
                         <td class="text-center">Withdrawn Course Name</td>
                     </tr>
                 </thead>
-                <tbody id="addCourse">
+                <tbody id="withCourse">
 
                 </tbody>
                 </table>

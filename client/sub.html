@@ -43,7 +43,7 @@ function show(data) {
         <td class="text-center">${r.sub_course.id}</td>
         <td class="text-center">${r.sub_course.name}</td>
         </tr>`;
-        tabStat = `<tr>
+        tabStat += `<tr>
         <td class="text-center">${r.status}</td>
         </tr>`;
         count ++;
@@ -74,7 +74,7 @@ function show(data) {
     }
 </style>
     
-    <body><div>
+    <body><div class="table table-responsive w-100">
         <table id="substitution" class="table table-borderless table-responsive w-100" border="2">
             <thead>
                 <tr>
@@ -129,10 +129,10 @@ function show(data) {
                         </table>
                     </td>
                     <td>
-                        <table class = "table table-responsive w-100">
+                        <table class = "table table-borderless table-responsive w-100" border="1">
                             <thead>
                                 <tr>
-                                    <td>STATUS</td>
+                                    <td><h5>STATUS</h5></td>
                                 </tr>
                             </thead>
                             <tbody id="statBody">
