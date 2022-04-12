@@ -196,10 +196,10 @@ class InsertIn():
         if len(ERP_DB.return_results()) != 0:
             raise ProgERROR(f"Subn Course id {subn_course_id} is already among student {student_id}'s registered courses!")
         # Final Execution
-        # ERP_DB.execute_command(
-        #     f'INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES ("{student_id}", "{curr_course_id}", "{subn_course_id}");'
-        # )
-        ERP_DB.DB_CURSOR.callproc("addSubstitutions", [student_id, curr_course_id, subn_course_id])
+        ERP_DB.execute_command(
+            f'INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES ("{student_id}", "{curr_course_id}", "{subn_course_id}");'
+        )
+        # ERP_DB.DB_CURSOR.callproc("addSubstitutions", [student_id, curr_course_id, subn_course_id])
 
 
 # Instantiate handlers
@@ -212,7 +212,7 @@ UpdateHandler = UpdateIn()
 # ERP_DB.DB_CURSOR.callproc('addStudent', ["heyte", "heyshere"])
 # ERP_DB.print_results()
 # InsertHandler.course("Tst", 1)
-# InsertHandler.subn_course(100, 1, 2)
+# InsertHandler.subn_course(100, 1, 4)
 # DeleteHandler.genByConds("course", id = 2)
 # DeleteHandler.genByConds("add_course", student_id = 1, course_id = 2)
 # UpdateHandler.genByConds("course", "name", "'check'", id = 1, capacity = 40)
