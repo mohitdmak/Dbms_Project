@@ -48,6 +48,7 @@ DROP TABLE IF EXISTS `add_course`;
 CREATE TABLE add_course(
     course_id  INT NOT NULL,
     student_id INT NOT NULL,
+    status          ENUM("PENDING", "SUCCESSFULL", "FAILED") DEFAULT "PENDING",
     PRIMARY KEY (student_id, course_id),
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id)  REFERENCES course(id)  ON DELETE CASCADE
@@ -58,6 +59,7 @@ CREATE TABLE sub_course(
     curr_course_id  INT NOT NULL,
     subn_course_id  INT NOT NULL,
     student_id      INT NOT NULL,
+    status          ENUM("PENDING", "SUCCESSFULL", "FAILED") DEFAULT "PENDING",
     PRIMARY KEY (student_id, curr_course_id, subn_course_id),
     FOREIGN KEY (student_id)      REFERENCES student(id) ON DELETE CASCADE,
     FOREIGN KEY (curr_course_id)  REFERENCES course(id)  ON DELETE CASCADE,
@@ -68,6 +70,7 @@ DROP TABLE IF EXISTS `withdraw_course`;
 CREATE TABLE withdraw_course(
     course_id  INT NOT NULL,
     student_id INT NOT NULL,
+    status          ENUM("PENDING", "SUCCESSFULL", "FAILED") DEFAULT "PENDING",
     PRIMARY KEY (student_id, course_id),
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id)  REFERENCES course(id) ON DELETE CASCADE
@@ -126,9 +129,6 @@ CREATE PROCEDURE `addCourse` (IN name VARCHAR(40), IN IC_id INT, IN capacity FLO
 BEGIN
     START TRANSACTION;
     IF LENGTH(name) <= 40 AND capacity < 100 THEN
-        SELECT IC_id;
-        SELECT ISNULL(IC_id);
-        SELECT * FROM teacher WHERE id = IC_id;
         IF (NOT ISNULL(IC_id) AND EXISTS(SELECT * FROM teacher WHERE id = IC_id)) OR (ISNULL(IC_id)) THEN 
             INSERT INTO course(`name`, `capacity`, `seats_left`, `IC_id`) VALUES (name, capacity, capacity, IC_id);
             COMMIT;
@@ -149,8 +149,11 @@ CREATE PROCEDURE `addTakes` (IN student_id INT, IN course_id INT)
 BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
+        SELECT "HII";
         IF (SELECT seats_left FROM course WHERE id = course_id) > 0 THEN
+            SELECT "HI";
             IF NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
+                SELECT "H";
                 INSERT INTO takes(`student_id`, `course_id`) VALUES (student_id, course_id);
                 UPDATE course SET seats_left = seats_left - 1 WHERE id = course_id;
                 COMMIT;
@@ -217,8 +220,10 @@ CREATE PROCEDURE `addSubstitutions` (IN student_id INT, IN curr_course_id INT, I
     COMMENT 'Adds a new substitution request for a student'
 BEGIN
     START TRANSACTION;
-    IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = curr_course_id) AND EXISTS(SELECT * FROM course WHERE id = subn_course_id) THEN
-        IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id) AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id)THEN
+    IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = curr_course_id) 
+        AND EXISTS(SELECT * FROM course WHERE id = subn_course_id) THEN
+        IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id) 
+            AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id)THEN
             IF NOT EXISTS(SELECT * FROM sub_course s WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id) THEN
                 INSERT INTO sub_course(student_id, curr_course_id, subn_course_id) VALUES (student_id, curr_course_id, subn_course_id);
                 COMMIT;
@@ -271,7 +276,8 @@ CREATE VIEW myCourses AS
 
 DROP VIEW IF EXISTS `myAdditions`;
 CREATE VIEW myAdditions AS
-    SELECT c.id AS course_id, c.name AS course_name, s.id AS student_id
+    SELECT c.id AS course_id, c.name AS course_name, 
+    s.id AS student_id, a.status
     FROM add_course a INNER JOIN student s 
     INNER JOIN course c 
     ON a.student_id = s.id AND a.course_id = c.id;
@@ -282,6 +288,83 @@ CREATE VIEW mySubstitutions AS
     (SELECT name FROM course WHERE id = curr_course_id) AS curr_course_name,
     subn_course_id as subn_course_id,
     (SELECT name FROM course WHERE id = subn_course_id) AS subn_course_name,
-    student_id
+    student_id, status
     FROM sub_course;
+
+DROP VIEW IF EXISTS `myWithdrawals`;
+CREATE VIEW myWithdrawals AS
+    SELECT course_id,
+    (SELECT name FROM course WHERE id = course_id) AS course_name,
+    student_id, status
+    FROM withdraw_course;
 /* > > > > > > > > > > > > > CREATED VIEWS > > > > > > > > > > > > > */
+
+
+/* > > > > > > > > > > > > > CREATING FUNCTIONS > > > > > > > > > > > > > */
+DROP PROCEDURE IF EXISTS `resolveAdditions`;
+DELIMITER $$
+CREATE PROCEDURE `resolveAdditions` (IN student_id INT, IN course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Resolves the addition request'
+BEGIN
+    DECLARE final_status ENUM("PENDING", "SUCCESSFULL", "FAILED");
+    DECLARE SEATS INT;
+    START TRANSACTION;
+    SET @SEATS = (SELECT c.seats_left FROM course c WHERE c.id = course_id);
+    IF @SEATS > 0 THEN
+        SET final_status = "SUCCESSFULL";
+        CALL addTakes(student_id, course_id);
+        UPDATE add_course s SET s.status = final_status WHERE s.student_id = student_id AND s.course_id = course_id;
+        COMMIT;
+    ELSE
+        SET final_status = "FAILED";
+        UPDATE add_course s SET s.status = final_status WHERE s.student_id = student_id AND s.course_id = course_id;
+        COMMIT;
+    END IF;
+    SELECT final_status;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `resolveSubstitutions`;
+DELIMITER $$
+CREATE PROCEDURE `resolveSubstitutions` (IN student_id INT, IN curr_course_id INT, IN subn_course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Resolves the Substitution request'
+BEGIN
+    DECLARE final_status ENUM("PENDING", "SUCCESSFULL", "FAILED");
+    DECLARE SEATS INT;
+    START TRANSACTION;
+    SET @SEATS = (SELECT c.seats_left FROM course c WHERE c.id = subn_course_id);
+    IF @SEATS > 0 THEN
+        SET final_status = "SUCCESSFULL";
+        CALL addTakes(student_id, subn_course_id);
+        DELETE FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id;
+        UPDATE course c SET c.seats_left = seats_left + 1 WHERE c.id = curr_course_id;
+        UPDATE sub_course s SET s.status = final_status WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id;
+        COMMIT;
+    ELSE
+        SET final_status = "FAILED";
+        UPDATE sub_course s SET s.status = final_status WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id;
+        COMMIT;
+    END IF;
+    SELECT final_status;
+END$$
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `resolveWithdrawals`;
+DELIMITER $$
+CREATE PROCEDURE `resolveWithdrawals` (IN student_id INT, IN course_id INT)
+    MODIFIES SQL DATA
+    COMMENT 'Resolves the withdrawal request'
+BEGIN
+    DECLARE final_status ENUM("PENDING", "SUCCESSFULL", "FAILED");
+    START TRANSACTION;
+        SET final_status = "SUCCESSFULL";
+        DELETE FROM takes t WHERE t.student_id = student_id AND t.course_id = course_id;
+        UPDATE course c SET c.seats_left = seats_left + 1 WHERE c.id = course_id;
+        UPDATE withdraw_course w SET w.status = final_status WHERE w.student_id = student_id AND w.course_id = course_id;
+        COMMIT;
+    SELECT final_status;
+END$$
+DELIMITER ;
+/* > > > > > > > > > > > > > CREATED FUNCTIONS > > > > > > > > > > > > > */
