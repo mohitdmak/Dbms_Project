@@ -349,7 +349,8 @@ BEGIN
     START TRANSACTION;
     SET @SEATS = (SELECT c.seats_left FROM course c WHERE c.id = subn_course_id);
     IF (SELECT status FROM sub_course s WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id) = "PENDING" THEN
-        IF @SEATS > 0 AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id) THEN
+        IF @SEATS > 0 AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id) 
+            AND EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id) THEN
             SET final_status = "SUCCESSFULL";
             CALL addTakes(student_id, subn_course_id);
             DELETE FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id;
