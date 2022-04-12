@@ -258,3 +258,30 @@ BEGIN
 END$$
 DELIMITER ;
 /* > > > > > > > > > > > > > CREATED PROCEDURES > > > > > > > > > > > > > */
+
+
+/* > > > > > > > > > > > > > CREATING VIEWS > > > > > > > > > > > > > */
+DROP VIEW IF EXISTS `myCourses`;
+CREATE VIEW myCourses AS
+    SELECT c.id AS course_id, c.name AS course_name,
+        (SELECT name FROM teacher where id = c.IC_id) AS course_IC,
+        c.capacity AS course_capacity, t.student_id AS student_id
+    FROM course c JOIN takes t
+    ON c.id = t.course_id;
+
+DROP VIEW IF EXISTS `myAdditions`;
+CREATE VIEW myAdditions AS
+    SELECT c.id AS course_id, c.name AS course_name, s.id AS student_id
+    FROM add_course a INNER JOIN student s 
+    INNER JOIN course c 
+    ON a.student_id = s.id AND a.course_id = c.id;
+
+DROP VIEW IF EXISTS `mySubstitutions`;
+CREATE VIEW mySubstitutions AS
+    SELECT curr_course_id as curr_course_id, 
+    (SELECT name FROM course WHERE id = curr_course_id) AS curr_course_name,
+    subn_course_id as subn_course_id,
+    (SELECT name FROM course WHERE id = subn_course_id) AS subn_course_name,
+    student_id
+    FROM sub_course;
+/* > > > > > > > > > > > > > CREATED VIEWS > > > > > > > > > > > > > */
