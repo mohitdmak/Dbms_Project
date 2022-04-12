@@ -146,6 +146,21 @@ def mysubstitutions(id):
         except:
             return jsonify({"message": "-1"})
 
+# Resolve all requests of all students
+@app.route("/resolve", methods = ["GET"])
+@cross_origin(supports_credentials = True)
+def resolve():
+    try:
+        # First resolve all withdrawal requests
+        ResolvementHandler.withdrawals()
+        # Second resolve all substitutions requests
+        ResolvementHandler.substitutions()
+        # Lastly resolve all additions requests
+        ResolvementHandler.additions()
+        return jsonify({"message": "All requests for all students are successfully resolved."})
+    except:
+        return jsonify({"message": "Resolvement for requests of students could not be completed."})
+
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # Teacher Registration
