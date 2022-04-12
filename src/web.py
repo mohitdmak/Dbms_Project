@@ -59,7 +59,7 @@ def mycourses(id):
     ERP_DB.execute_command(f'SELECT * FROM myCourses WHERE student_id = {id};')
     db_res = ERP_DB.return_results()
     for course in db_res:
-        res.append({"id": course[0], "name": course[1], "IC_ID": course[2], "IC_name": course[3], "capacity": course[4]})
+        res.append({"id": course[0], "name": course[1], "IC_ID": course[2], "IC_name": course[3], "capacity": int(course[4])})
     return jsonify(res)
 
 # Details of a singular course
@@ -77,13 +77,13 @@ def courseDetails():
 # Student withdrawal path
 @app.route("/mywithdrawals/<id>", methods = ["GET", "POST"])
 @cross_origin(supports_credentials = True)
-def withdraw(id):
+def mywithdrawals(id):
     if request.method == "GET":
         res = []
         ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id}')
         db_res = ERP_DB.return_results()
         for course in db_res:
-            res.append({"id": course[0], "name": course[1], "status": course[3]})
+            res.append({"id": course[0], "name": course[1], "seats_left": int(course[2]), "status": course[4]})
         return jsonify(res)
     else:
         try:
@@ -107,7 +107,7 @@ def myadditions(id):
         ERP_DB.execute_command(f'SELECT * FROM myAdditions WHERE student_id = {id}')
         db_res = ERP_DB.return_results()
         for course in db_res:
-            res.append({"id": course[0], "name": course[1], "status": course[3]})
+            res.append({"id": course[0], "name": course[1], "seats_left": int(course[2]), "status": course[4]})
         return jsonify(res)
     else:
         try:
@@ -130,7 +130,8 @@ def mysubstitutions(id):
         ERP_DB.execute_command(f'SELECT * FROM mySubstitutions WHERE student_id = {id}')
         db_res = ERP_DB.return_results()
         for course in db_res:
-            res.append({"current_course": {"id": course[0], "name": course[1]}, "sub_course": {"id": course[2], "name": course[3]}, "status": course[5]})
+            res.append({"current_course": {"id": course[0], "name": course[1], "seats_left": int(course[2])}, 
+                           "sub_course": {"id": course[3], "name": course[4], "seats_left": int(course[5])}, "status": course[7]})
         return jsonify(res)
     else:
         try:
