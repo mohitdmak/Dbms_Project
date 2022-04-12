@@ -286,6 +286,7 @@ CREATE VIEW myCourses AS
 DROP VIEW IF EXISTS `myAdditions`;
 CREATE VIEW myAdditions AS
     SELECT c.id AS course_id, c.name AS course_name, 
+    c.seats_left AS seats_left,
     s.id AS student_id, a.status
     FROM add_course a INNER JOIN student s 
     INNER JOIN course c 
@@ -295,8 +296,10 @@ DROP VIEW IF EXISTS `mySubstitutions`;
 CREATE VIEW mySubstitutions AS
     SELECT curr_course_id as curr_course_id, 
     (SELECT name FROM course WHERE id = curr_course_id) AS curr_course_name,
+    (SELECT seats_left FROM course WHERE id = curr_course_id) AS curr_course_seats_left,
     subn_course_id as subn_course_id,
     (SELECT name FROM course WHERE id = subn_course_id) AS subn_course_name,
+    (SELECT seats_left FROM course WHERE id = subn_course_id) AS subn_course_seats_left,
     student_id, status
     FROM sub_course;
 
@@ -304,6 +307,7 @@ DROP VIEW IF EXISTS `myWithdrawals`;
 CREATE VIEW myWithdrawals AS
     SELECT course_id,
     (SELECT name FROM course WHERE id = course_id) AS course_name,
+    (SELECT seats_left FROM course WHERE id = course_id) AS seats_left,
     student_id, status
     FROM withdraw_course;
 /* > > > > > > > > > > > > > CREATED VIEWS > > > > > > > > > > > > > */
