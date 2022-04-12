@@ -83,7 +83,7 @@ DELIMITER $$
 CREATE PROCEDURE `addStudent` (IN name VARCHAR(40), IN username VARCHAR(20))
     MODIFIES SQL DATA
     COMMENT 'Add student with unique username'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF LENGTH(name) <= 40 AND LENGTH(username) <= 20 THEN
         IF NOT EXISTS(SELECT * FROM student WHERE 'username' = username) THEN
@@ -103,7 +103,7 @@ DELIMITER $$
 CREATE PROCEDURE `addTeacher` (IN name VARCHAR(40), IN username VARCHAR(20))
     MODIFIES SQL DATA
     COMMENT 'Add teacher with unique username'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF LENGTH(name) <= 40 AND LENGTH(username) <= 20 THEN
         IF NOT EXISTS(SELECT * FROM teacher WHERE 'username' = username) THEN
@@ -123,7 +123,7 @@ DELIMITER $$
 CREATE PROCEDURE `addCourse` (IN name VARCHAR(40), IN IC_id INT, IN capacity FLOAT(2,0))
     MODIFIES SQL DATA
     COMMENT 'Add a new course'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF LENGTH(name) <= 40 AND capacity < 100 THEN
         SELECT IC_id;
@@ -146,7 +146,7 @@ DELIMITER $$
 CREATE PROCEDURE `addTakes` (IN student_id INT, IN course_id INT)
     MODIFIES SQL DATA
     COMMENT 'Add a new takes relation between student and course'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM student WHERE id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
         IF (SELECT seats_left FROM course WHERE id = course_id) > 0 THEN
@@ -171,7 +171,7 @@ DELIMITER $$
 CREATE PROCEDURE `addAssists` (IN teacher_id INT, IN course_id INT)
     MODIFIES SQL DATA
     COMMENT 'Add a new assistant teacher and course relation'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM teacher WHERE id = teacher_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
         IF NOT EXISTS(SELECT * FROM assists WHERE 'teacher_id' = teacher_id AND 'course_id' = course_id) THEN
@@ -191,7 +191,7 @@ DELIMITER $$
 CREATE PROCEDURE `addAdditions` (IN student_id INT, IN course_id INT)
     MODIFIES SQL DATA
     COMMENT 'Adds a new addition request for a student'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = course_id) THEN
         IF NOT EXISTS(SELECT * FROM takes WHERE 'student_id' = student_id AND 'course_id' = course_id) THEN
@@ -215,7 +215,7 @@ DELIMITER $$
 CREATE PROCEDURE `addSubstitutions` (IN student_id INT, IN curr_course_id INT, IN subn_course_id INT)
     MODIFIES SQL DATA
     COMMENT 'Adds a new substitution request for a student'
-BEGIN
+    BEGIN
     START TRANSACTION;
     IF EXISTS(SELECT * FROM student where id = student_id) AND EXISTS(SELECT * FROM course WHERE id = curr_course_id) AND EXISTS(SELECT * FROM course WHERE id = subn_course_id) THEN
         IF EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id) AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id)THEN
