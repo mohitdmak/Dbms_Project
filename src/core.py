@@ -20,6 +20,7 @@ class UpdateIn():
             raise ProgERROR(f"Attempting to Update Table {table}!")
         ERP_DB.execute_command(condition)
 
+
 # Class handling deletions to db
 class DeleteFrom():
     def genByConds(self, table, **kwargs) -> None:
@@ -34,6 +35,7 @@ class DeleteFrom():
         else:
             raise ProgERROR(f"Attempting to Erase Table {table}!")
         ERP_DB.execute_command(condition)
+
 
 # Class handling all additions to db
 class InsertIn():
@@ -202,15 +204,56 @@ class InsertIn():
         ERP_DB.DB_CURSOR.callproc("addSubstitutions", [student_id, curr_course_id, subn_course_id])
 
 
+class ResolvementOf:
+    def withdrawals(self):
+        print("\n   Resolving Withdrawals > > > > > > > > > > > > > > > > > > > > > > > >\n")
+        ERP_DB.execute_command(f'SELECT * FROM withdraw_course;')
+        withdrawal_requests = ERP_DB.return_results()
+        for request in withdrawal_requests:
+            print(f"c {request[0]} s {request[1]} st {request[2]}")
+            # ERP_DB.execute_command(f'CALL resolveWithdrawals({request[1]}, {request[0]})')
+            ERP_DB.DB_CURSOR.callproc("resolveWithdrawals", [request[1], request[0]])
+            ERP_DB.print_results()
+            ERP_DB.restart()
+        print("\n   Resolved Withdrawals < < < < < < < < < < < < < < < < < < < < < < < <\n")
+
+    def substitutions(self):
+        print("\n   Resolving Substitutions > > > > > > > > > > > > > > > > > > > > > > > >\n")
+        ERP_DB.execute_command(f'SELECT * from sub_course;')
+        substitution_requests = ERP_DB.return_results()
+        for request in substitution_requests:
+            print(f"cr {request[0]} sn {request[1]} s {request[2]} st {request[3]}")
+            ERP_DB.DB_CURSOR.callproc("resolveSubstitutions", [request[2], request[0], request[1]])
+            ERP_DB.print_results()
+            ERP_DB.restart()
+        print("\n   Resolved Substitutions < < < < < < < < < < < < < < < < < < < < < < < <\n")
+
+    def additions(self):
+        print("\n   Resolving Additions > > > > > > > > > > > > > > > > > > > > > > > >\n")
+        ERP_DB.execute_command(f'SELECT * from add_course;')
+        addition_requests = ERP_DB.return_results()
+        for request in addition_requests:
+            print(f"c {request[0]} s {request[1]} st {request[2]}")
+            ERP_DB.DB_CURSOR.callproc("resolveAdditions", [request[1], request[0]])
+            ERP_DB.print_results()
+            ERP_DB.restart()
+        print("\n   Resolved Additions < < < < < < < < < < < < < < < < < < < < < < < <\n")
+
+
 # Instantiate handlers
 InsertHandler = InsertIn()
 DeleteHandler = DeleteFrom()
 UpdateHandler = UpdateIn()
+ResolvementHandler = ResolvementOf()
+
 
 # Test executions ---------------------------
 # InsertHandler.student("Tstssssssssssssssssss", "usssssssssssssssr")
 # ERP_DB.DB_CURSOR.callproc('addStudent', ["heyte", "heyshere"])
 # ERP_DB.print_results()
+ResolvementHandler.withdrawals()
+ResolvementHandler.substitutions()
+ResolvementHandler.additions()
 # InsertHandler.course("Tst", 1)
 # InsertHandler.subn_course(100, 1, 4)
 # DeleteHandler.genByConds("course", id = 2)
