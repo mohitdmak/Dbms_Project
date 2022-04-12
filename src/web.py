@@ -63,7 +63,7 @@ def mycourses(id):
     return jsonify(res)
 
 # Details of a singular course
-@app.route("/course_detail/", methods = ["GET"])
+@app.route("/course_detail/", methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def courseDetails():
     id = request.get_json()['course_id'] # type: ignore
@@ -89,8 +89,6 @@ def withdraw(id):
         try:
             content = request.get_json()
             course_id = content['course_id'] # type: ignore
-            print(course_id)
-            print(id)
             InsertHandler.withdraw_course(id, course_id)
             ERP_DB.execute_command(f'SELECT * FROM myWithdrawals WHERE student_id = {id} AND course_id = {course_id};')
             db_res = ERP_DB.return_results()
@@ -111,7 +109,17 @@ def myadditions(id):
         for course in db_res:
             res.append({"id": course[0], "name": course[1], "status": course[3]})
         return jsonify(res)
-    # else:
+    else:
+        try:
+            content = request.get_json()
+            course_id = content['course_id'] # type: ignore
+            InsertHandler.addn_course(id, course_id)
+            ERP_DB.execute_command(f'SELECT * FROM myAdditions WHERE student_id = {id} AND course_id = {course_id};')
+            db_res = ERP_DB.return_results()
+            res = 1 if len(db_res) == 1 else (-1) # type: ignore
+            return jsonify({"message": str(res)})
+        except:
+            return jsonify({"message": "-1"})
 
 # Student's substitution requests
 @app.route("/mysubstitutions/<id>", methods = ["GET", "POST"])
@@ -124,7 +132,18 @@ def mysubstitutions(id):
         for course in db_res:
             res.append({"current_course": {"id": course[0], "name": course[1]}, "sub_course": {"id": course[2], "name": course[3]}, "status": course[5]})
         return jsonify(res)
-    # else:
+    else:
+        try:
+            content = request.get_json()
+            curr_course_id = content['curr_course_id'] # type: ignore
+            subn_course_id = content['subn_course_id'] # type: ignore
+            InsertHandler.subn_course(id, curr_course_id, subn_course_id)
+            ERP_DB.execute_command(f'SELECT * FROM mySubstitutions WHERE student_id = {id} AND curr_course_id = {curr_course_id} AND subn_course_id = {subn_course_id};')
+            db_res = ERP_DB.return_results()
+            res = 1 if len(db_res) == 1 else (-1) # type: ignore
+            return jsonify({"message": str(res)})
+        except:
+            return jsonify({"message": "-1"})
 
 
 # ADMINISTRATOR URLS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
