@@ -99,7 +99,7 @@ function addCourseConfirm(){
     axios.post(URL, data, config)
     .then(res=>{
       data = res.data;
-      if(data.id>0){
+      if(parseInt(data.id)>0){
         alert("Addition Request Confirm");
       }
       else{
@@ -132,7 +132,7 @@ function subCourseConfirm(){
     axios.post(URL, data, config)
     .then(res=>{
       data = res.data;
-      if(data.message>0){
+      if(parseInt(data.message)>0){
         alert("Substitution Request Confirmed");
       }
       else{
@@ -164,7 +164,7 @@ function withCourseConfirm(){
     .then(res=>{
       console.log(res.data);
       data = res.data;
-      if(data.message>0){
+      if(parseInt(data.message)>0){
         alert("Withdrawal Request Confirmed");
       }
       else{
@@ -250,4 +250,41 @@ function displayCourseTo(){
         </tr>`;
       document.getElementById("chosenCourseTo").innerHTML = body;
     })
+}
+function resolveAllQueries(){
+  
+  const Username = localStorage.getItem("Name");
+  const ID = parseInt(localStorage.getItem("ID"))
+  const api_url = 
+    `http://localhost:5000/resolve`;
+
+// Defining async function
+async function getapi(url) {
+  
+  // Storing response
+  const response = await fetch(url);
+  
+  // Storing data in form of JSON
+  var data = await response.json();
+  show(data);
+}
+getapi(api_url);
+
+function show(data) {
+  /*let tab = ``;
+  data.forEach((r) => {
+      tab += `<tr> 
+      <td>${r.id} </td>
+      <td>${r.name}</td>
+      <td>${r.IC_ID}</td> 
+      <td>${r.IC_name}</td>
+      <td>${r.capacity}</td>          
+      </tr>`;
+  });*/
+  alert(data.message);
+  var loc = window.location.pathname;
+  var dir = loc.substring(0, loc.lastIndexOf('/'));
+  dir += "/course.html";
+  location.href = dir;
+  }
 }
