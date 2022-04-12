@@ -265,7 +265,7 @@ DELIMITER ;
 /* > > > > > > > > > > > > > CREATING VIEWS > > > > > > > > > > > > > */
 DROP VIEW IF EXISTS `myCourses`;
 CREATE VIEW myCourses AS
-    SELECT c.id AS course_id, c.name AS course_name,
+    SELECT c.id AS course_id, c.name AS course_name, c.IC_id,
         (SELECT name FROM teacher where id = c.IC_id) AS course_IC,
         c.capacity AS course_capacity, t.student_id AS student_id
     FROM course c JOIN takes t
