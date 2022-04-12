@@ -177,7 +177,7 @@ function withCourseConfirm(){
 }
 
 function displayCourse(){ 
-  const api_url = 
+  /*const api_url = 
   `http://localhost:5000/course_detail`;
 
   async function getapi(url) {
@@ -206,8 +206,8 @@ data.forEach((r) => {
 console.log(tab)
 document.getElementById("table").innerHTML = tab;
 }
-}
-    /*const courseId = document.getElementById("input").value;
+}*/
+    const courseId = document.getElementById("input").value;
     document.getElementById("input").value="";
     let config = {
         headers: {
@@ -217,7 +217,7 @@ document.getElementById("table").innerHTML = tab;
       }
     let data = {course_id: courseId}
 
-    let URL = 'http://localhost:5000/course_detail/';
+    let URL = 'http://localhost:5000/course_detail';
 
     axios.post(URL, data, config)
     .then(res=>{
@@ -229,18 +229,20 @@ document.getElementById("table").innerHTML = tab;
         <td class = "text-center">Course ID</td>
         <td class = "text-center">Course Name</td>
         <td class = "text-center">IC ID</td>
+        <td class = "text-center">IC name</td>
+        <td class = "text-center">capacity</td>
         <td class = "text-center">Seats Left</td>
-        <td class = "text-center">Capacity</td>
         </tr>`
 
         res.forEach(r=>{
           body += `<tr> 
-        <td>${r.id} </td>
-        <td>${r.name}</td>
-        <td>${r.IC_ID}</td> 
-        <td>${r.seats_left}</td>
-        <td>${r.capacity}</td>          
-        </tr>`;
+          <td>${r.id} </td>
+          <td>${r.name}</td>
+          <td>${r.IC_id}</td> 
+          <td>${r.ic_name}</td>
+          <td>${r.capacity}</td>
+          <td>${r.seats_left}</td>
+          </tr>`;
         });
         console.log(tab);
         document.getElementById("chosenBody").innerHTML = empty;
@@ -250,4 +252,4 @@ document.getElementById("table").innerHTML = tab;
       })
 
     .catch(e=>console.log(e))
-}*/
+}
