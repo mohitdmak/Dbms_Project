@@ -160,12 +160,13 @@ function withCourseConfirm(){
 
     axios.post(URL, data, config)
     .then(res=>{
+      console.log(res.data);
       data = res.data;
-      if(data.id>0){
+      if(data.message>0){
         alert("Withdrawal Request Confirmed");
       }
       else{
-        alert("Withdrawal Request Rejected because of One of the following reasons:\n1) \n2) \n");
+        alert("Withdrawal Request Rejected because of One of the following reasons:\n1) \n2) \n3)");
       }
 
       var loc = window.location.pathname;
@@ -175,7 +176,37 @@ function withCourseConfirm(){
     .catch(e=>console.log(e))
 }
 
-function displayCourse(){
+function displayCourse(){ 
+  /*const api_url = 
+  `http://localhost:5000/course_detail`;
+
+  async function getapi(url) {
+
+// Storing response
+  const response = await fetch(url);
+
+var data = await response.json();
+show(data);
+}
+getapi(api_url);
+
+function show(data) {
+let tab = ``;
+data.forEach((r) => {
+    tab += `<tr> 
+    <td>${r.id} </td>
+    <td>${r.name}</td>
+    <td>${r.IC_id}</td> 
+    <td>${r.capacity}</td>
+    <td>${r.seats_left}</td>
+    <td>${r.ic_name}</td>
+    </tr>`;
+});
+
+console.log(tab)
+document.getElementById("table").innerHTML = tab;
+}
+}*/
     const courseId = document.getElementById("input").value;
     document.getElementById("input").value="";
     let config = {
@@ -198,18 +229,20 @@ function displayCourse(){
         <td class = "text-center">Course ID</td>
         <td class = "text-center">Course Name</td>
         <td class = "text-center">IC ID</td>
+        <td class = "text-center">IC name</td>
+        <td class = "text-center">capacity</td>
         <td class = "text-center">Seats Left</td>
-        <td class = "text-center">Capacity</td>
         </tr>`
 
         res.forEach(r=>{
           body += `<tr> 
-        <td>${r.id} </td>
-        <td>${r.name}</td>
-        <td>${r.IC_ID}</td> 
-        <td>${r.seats_left}</td>
-        <td>${r.capacity}</td>          
-        </tr>`;
+          <td>${r.id} </td>
+          <td>${r.name}</td>
+          <td>${r.IC_id}</td> 
+          <td>${r.ic_name}</td>
+          <td>${r.capacity}</td>
+          <td>${r.seats_left}</td>
+          </tr>`;
         });
         console.log(tab);
         document.getElementById("chosenBody").innerHTML = empty;
@@ -220,4 +253,3 @@ function displayCourse(){
 
     .catch(e=>console.log(e))
 }
-

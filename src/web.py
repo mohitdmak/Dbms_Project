@@ -63,7 +63,7 @@ def mycourses(id):
     return jsonify(res)
 
 # Details of a singular course
-@app.route("/course_detail/", methods = ["POST"])
+@app.route("/course_detail", methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def courseDetails():
     id = request.get_json()['course_id'] # type: ignore
