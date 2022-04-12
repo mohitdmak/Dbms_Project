@@ -311,15 +311,19 @@ BEGIN
     DECLARE SEATS INT;
     START TRANSACTION;
     SET @SEATS = (SELECT c.seats_left FROM course c WHERE c.id = course_id);
-    IF @SEATS > 0 THEN
-        SET final_status = "SUCCESSFULL";
-        CALL addTakes(student_id, course_id);
-        UPDATE add_course s SET s.status = final_status WHERE s.student_id = student_id AND s.course_id = course_id;
-        COMMIT;
+    IF (SELECT status FROM add_course a WHERE a.student_id = student_id AND a.course_id = course_id) = "PENDING" THEN
+        IF @SEATS > 0 AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = course_id) THEN
+            SET final_status = "SUCCESSFULL";
+            CALL addTakes(student_id, course_id);
+            UPDATE add_course a SET a.status = final_status WHERE a.student_id = student_id AND a.course_id = course_id;
+            COMMIT;
+        ELSE
+            SET final_status = "FAILED";
+            UPDATE add_course a SET a.status = final_status WHERE a.student_id = student_id AND a.course_id = course_id;
+            COMMIT;
+        END IF;
     ELSE
-        SET final_status = "FAILED";
-        UPDATE add_course s SET s.status = final_status WHERE s.student_id = student_id AND s.course_id = course_id;
-        COMMIT;
+        ROLLBACK;
     END IF;
     SELECT final_status;
 END$$
@@ -335,17 +339,21 @@ BEGIN
     DECLARE SEATS INT;
     START TRANSACTION;
     SET @SEATS = (SELECT c.seats_left FROM course c WHERE c.id = subn_course_id);
-    IF @SEATS > 0 THEN
-        SET final_status = "SUCCESSFULL";
-        CALL addTakes(student_id, subn_course_id);
-        DELETE FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id;
-        UPDATE course c SET c.seats_left = seats_left + 1 WHERE c.id = curr_course_id;
-        UPDATE sub_course s SET s.status = final_status WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id;
-        COMMIT;
+    IF (SELECT status FROM sub_course s WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id) = "PENDING" THEN
+        IF @SEATS > 0 AND NOT EXISTS(SELECT * FROM takes t WHERE t.student_id = student_id AND t.course_id = subn_course_id) THEN
+            SET final_status = "SUCCESSFULL";
+            CALL addTakes(student_id, subn_course_id);
+            DELETE FROM takes t WHERE t.student_id = student_id AND t.course_id = curr_course_id;
+            UPDATE course c SET c.seats_left = seats_left + 1 WHERE c.id = curr_course_id;
+            UPDATE sub_course s SET s.status = final_status WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id;
+            COMMIT;
+        ELSE
+            SET final_status = "FAILED";
+            UPDATE sub_course s SET s.status = final_status WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id;
+            COMMIT;
+        END IF;
     ELSE
-        SET final_status = "FAILED";
-        UPDATE sub_course s SET s.status = final_status WHERE s.student_id = student_id AND s.curr_course_id = curr_course_id AND s.subn_course_id = subn_course_id;
-        COMMIT;
+        ROLLBACK;
     END IF;
     SELECT final_status;
 END$$
@@ -359,11 +367,15 @@ CREATE PROCEDURE `resolveWithdrawals` (IN student_id INT, IN course_id INT)
 BEGIN
     DECLARE final_status ENUM("PENDING", "SUCCESSFULL", "FAILED");
     START TRANSACTION;
+    IF (SELECT status FROM withdraw_course w WHERE w.student_id = student_id AND w.course_id = course_id) = "PENDING" THEN
         SET final_status = "SUCCESSFULL";
         DELETE FROM takes t WHERE t.student_id = student_id AND t.course_id = course_id;
         UPDATE course c SET c.seats_left = seats_left + 1 WHERE c.id = course_id;
         UPDATE withdraw_course w SET w.status = final_status WHERE w.student_id = student_id AND w.course_id = course_id;
         COMMIT;
+    ELSE
+        ROLLBACK;
+    END IF;
     SELECT final_status;
 END$$
 DELIMITER ;
