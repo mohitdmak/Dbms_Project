@@ -100,10 +100,16 @@ function addCourseConfirm(){
     .then(res=>{
       data = res.data;
       if(parseInt(data.message)>0){
-        alert("Addition Request Confirm");
+        alert("Addition Request Confirmed");
       }
       else{
-        alert("Addition Request Rejected because of One of the following reasons:\n1) \n2) \n");
+        alert(
+            "Addition Request Rejected because of One of the following reasons: \
+                \n1) You already have the course as registered. \
+                \n2) You have already sent an addition request for the course. \
+                \n3) No such course exists \
+                \n4) You may have already submitted 2 Addition requests (maximum)."
+        );
       }
       var loc = window.location.pathname;
       var dir = loc.substring(0, loc.lastIndexOf('/'));
@@ -136,7 +142,14 @@ function subCourseConfirm(){
         alert("Substitution Request Confirmed");
       }
       else{
-        alert("Substitution Request Rejected because of One of the following reasons:\n1) \n2) \n");
+        alert(
+            "Substitution Request Rejected because of One of the following reasons: \
+                \n1) Curr course you specified may not actually be a current registered course \
+                \n2) Subn course you specified may already be a registered course \
+                \n3) You may already have submitted an exact same substitution request \
+                \n4) No course with your specified ID may exist \
+                \n5) You may have already used 2 substitution requests (maximum)."
+        );
       }
 
       var loc = window.location.pathname;
@@ -168,7 +181,12 @@ function withCourseConfirm(){
         alert("Withdrawal Request Confirmed");
       }
       else{
-        alert("Withdrawal Request Rejected because of One of the following reasons:\n1) \n2) \n3)");
+        alert(
+            "Withdrawal Request Rejected because of One of the following reasons: \
+                \n1) You may not already have the course registered. \
+                \n2) You may have already submitted a withdrawal request for the course.\
+                \n3) You may have already submitted 2 withdrawal requests (maximum)."
+        );
       }
 
       var loc = window.location.pathname;
