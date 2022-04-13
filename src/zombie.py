@@ -144,11 +144,11 @@ class FakeData():
                 for j in range(total))
             self.fake.unique.clear()
             for k in range(total):
-                print(f"FAKE WITHDRAWL: StudentId {i + 1} CurrCourseId {course_id_list[course_index_list[k]]}")
+                print(f"FAKE WITHDRAWAL: StudentId {i + 1} CurrCourseId {course_id_list[course_index_list[k]]}")
                 InsertHandler.withdraw_course(
                     i + 1, course_id_list[course_index_list[k]])
             self.fake.unique.clear()
-        print(f"\n   Generated {DB_WIDE_FAKE.WITH_LIM} Wthdrawals as Max Lim < < < < < < < < < < < < < < < < < < < < < < < <\n")     
+        print(f"\n   Generated {DB_WIDE_FAKE.WITH_LIM} Withdrawals as Max Lim < < < < < < < < < < < < < < < < < < < < < < < <\n")     
     
     # Substitution Courses
     def fake_subn_courses(self):
