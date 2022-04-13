@@ -103,7 +103,7 @@ function addCourseConfirm(){
         alert("Addition Request Confirm");
       }
       else{
-        alert("Addition Request Rejected because of One of the following reasons:\n1) \n2) \n");
+        alert("Addition Request Rejected because of One of the following reasons:\n1) You already have the course in your List \n2) There are no seats left in the course \n3) You already have an Addition request for the same course");
       }
       var loc = window.location.pathname;
       var dir = loc.substring(0, loc.lastIndexOf('/'));
@@ -136,7 +136,7 @@ function subCourseConfirm(){
         alert("Substitution Request Confirmed");
       }
       else{
-        alert("Substitution Request Rejected because of One of the following reasons:\n1) \n2) \n");
+        alert("Substitution Request Rejected because of One of the following reasons:\n1) You already have the Substitution course in your List \n2) There are no seats left in the Substitution course \n3) You already have a Substitution request for the same course");
       }
 
       var loc = window.location.pathname;
@@ -168,7 +168,7 @@ function withCourseConfirm(){
         alert("Withdrawal Request Confirmed");
       }
       else{
-        alert("Withdrawal Request Rejected because of One of the following reasons:\n1) \n2) \n3)");
+        alert("Addition Request Rejected because of One of the following reasons:\n1) You already have a Withdrawal request for the same course");
       }
 
       var loc = window.location.pathname;
