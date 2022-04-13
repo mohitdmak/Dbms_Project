@@ -269,6 +269,7 @@ function displayCourseTo(){
       document.getElementById("chosenCourseTo").innerHTML = body;
     })
 }
+
 function resolveAllQueries(){
   
   const Username = localStorage.getItem("Name");
