@@ -54,8 +54,9 @@ function show(data) {
     });
     // Setting innerHTML as tab variable
     if(count != 0){
-    console.log(tabCurr)
-    console.log(tabSub)
+    console.log(tabCurr);
+    console.log(tabSub);
+    console.log(tabStat);
     document.getElementById("CurrBody").innerHTML = tabCurr;
     document.getElementById("SubBody").innerHTML = tabSub;
     document.getElementById("statBody").innerHTML = tabStat;
@@ -64,7 +65,7 @@ function show(data) {
     </script>
 <style>
     body {
-        animation: fadeInAnimation ease 3s;
+        animation: fadeInAnimation ease 2s;
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
     }
@@ -137,26 +138,29 @@ function show(data) {
                         </table>
                     </td>
                     <td>
-                        <table class = "table table-borderless table-dark table-striped table-responsive w-100" border="1">
-                            <thead>
+                        <table id="statTable" class = "table table-borderless table-dark table-striped table-responsive w-100" border="1">
                                 <tr>
-                                    <td><h5>STATUS</h5></td>
+                                    <td class="text-center"><h3>Current Status</h3></td>
                                 </tr>
-                            </thead>
-                            <tbody id="statBody">
-                                <tr>
-                                    <td>NONE</td>
-                                </tr>
-                            </tbody>
+                                <tr><td class="text-center">
+                                    <table class = "table table-borderless table-dark table-striped table-responsive w-100" border="1">
+                                        <thead>
+                                            <tr><td class="text-center"><h5>STATUS</h5></td></tr>
+                                        </thead>
+                                        <tbody id="statBody">
+                                            <tr><td class="text-center">NONE</td></tr>
+                                        </tbody>
+                                    </table>
+                                </td></tr>
                         </table>
                     </td>
                 </tr>
-                <tr><td class="text-center">
-                    <table id="chosenCourse" class="table table-dark table-borderless w-100" border="2" border-color: "white">
+                <tr><td class="text-center" colspan="1">
+                    <table id="chosenCourse" class="table table-dark table-striped w-100" border="2" border-color: "white">
     
                     </table>
                 </td><td class="text-center" colspan="2">
-                    <table id="chosenCourseTo" class="table table-dark w-100" border="2">
+                    <table id="chosenCourseTo" class="table table-dark table-striped w-100" border="2">
     
                     </table>
                 </td></tr>

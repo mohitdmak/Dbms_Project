@@ -99,7 +99,7 @@ function addCourseConfirm(){
     axios.post(URL, data, config)
     .then(res=>{
       data = res.data;
-      if(parseInt(data.id)>0){
+      if(parseInt(data.message)>0){
         alert("Addition Request Confirm");
       }
       else{

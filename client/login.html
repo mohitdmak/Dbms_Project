@@ -8,6 +8,27 @@
     <link rel="stylesheet" type="text/css" href="css/login.css">
     <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script src="./test.js"></script>
+</head>
+
+<style>
+    body {
+        animation: fadeInAnimation ease 2s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fadeInAnimation {
+        0% {
+            opacity: 0;
+        }
+        50%{
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
+
 <body>
     <div class ="Page">    
     <h2>Login Page</h2><br>    
@@ -32,7 +53,6 @@
         <button class="Register" id="register" onclick="goToRegister()">Register</button>
        
         <br><br>
-        <div id="res"></div>
     </div></div>
 </body>    
 </html>  
