@@ -1,3 +1,9 @@
+/* > > > > > > > > > > > > > CREATING DATABASES > > > > > > > > > > > > > */
+DROP DATABASE IF EXISTS `erp`;
+CREATE DATABASE `erp`;
+USE erp;
+/* > > > > > > > > > > > > > CREATED DATABASES > > > > > > > > > > > > > */
+
 /* > > > > > > > > > > > > > CREATING TABLES > > > > > > > > > > > > > */
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE teacher(
@@ -394,3 +400,20 @@ BEGIN
 END$$
 DELIMITER ;
 /* > > > > > > > > > > > > > CREATED FUNCTIONS > > > > > > > > > > > > > */
+
+
+
+/* > > > > > > > > > > > > > CREATING FAKE DATA > > > > > > > > > > > > > */
+
+/* To create fake data in all tables, exit and run `python3 src/zombie.py` from the root dir. */
+/* Make sure you have `Faker` library installed. */
+/* Follow the README.txt for more steps on this. */
+
+/* > > > > > > > > > > > > > CREATED FAKE DATA > > > > > > > > > > > > > */
+
+
+/* > > > > > > > > > > > > > DROPPING ALL DATA > > > > > > > > > > > > > */
+
+/* DROP DATABASE IF EXISTS `erp`; */
+
+/* > > > > > > > > > > > > > DROPPED ALL DATA > > > > > > > > > > > > > */
